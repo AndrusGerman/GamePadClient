@@ -48,7 +48,6 @@ class ConnectionWS extends gbloc.Bloc {
   sendSignal(EventWSCreator salida) {
     if (channel != null) {
       channel!.sink.add(salida.json());
-      print("Envio tap");
     } else {
       isConnect.add(false);
     }
