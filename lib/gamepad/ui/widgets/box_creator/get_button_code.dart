@@ -26,7 +26,7 @@ class GenerateCodesButton {
 
     final listViewItems = ListView.builder(
         itemBuilder: (contextBuilder, index) {
-          final itemRepo = repository.dataKeyboard[index];
+          final itemRepo = itemsRepo[index];
 
           final item = ListTile(
             title: Text(itemRepo.getName()),
@@ -42,7 +42,7 @@ class GenerateCodesButton {
 
           return item;
         },
-        itemCount: repository.dataKeyboard.length);
+        itemCount: itemsRepo.length);
 
     await showDialog(
         context: primaryContext,
