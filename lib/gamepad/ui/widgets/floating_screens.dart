@@ -36,13 +36,40 @@ class FloatingScreensContainer extends StatelessWidget {
             },
             icon: Icons.remove),
         // Connect
-        FloatingScreenButtonButton(
+        ConnectButtonBuilder(),
+      ],
+    );
+  }
+}
+
+class ConnectButtonBuilder extends StatefulWidget {
+  const ConnectButtonBuilder({Key? key}) : super(key: key);
+
+  @override
+  State<ConnectButtonBuilder> createState() => _ConnectButtonBuilderState();
+}
+
+class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
+
+    return StreamBuilder(
+      builder: ((context, AsyncSnapshot<bool?> snapshot) {
+        final color = (snapshot.data!) ? Colors.white : Colors.red;
+
+        final connect = FloatingScreenButtonButton(
             onPressed: () {
               final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
               bloc.connect("192.168.101.16");
             },
-            icon: Icons.connected_tv)
-      ],
+            icon: Icons.connected_tv,
+            color: color);
+
+        return connect;
+      }),
+      initialData: false,
+      stream: bloc.isConnect.stream,
     );
   }
 }
@@ -50,10 +77,12 @@ class FloatingScreensContainer extends StatelessWidget {
 class FloatingScreenButtonButton extends StatelessWidget {
   final void Function() onPressed;
   final IconData icon;
+  final Color color;
   const FloatingScreenButtonButton({
     Key? key,
     required this.onPressed,
     required this.icon,
+    this.color = Colors.white,
   }) : super(key: key);
 
   @override
@@ -63,7 +92,10 @@ class FloatingScreenButtonButton extends StatelessWidget {
       child: FloatingActionButton.small(
         onPressed: onPressed,
         tooltip: 'Increment',
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          color: color,
+        ),
       ),
     );
   }

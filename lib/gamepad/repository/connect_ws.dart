@@ -9,6 +9,10 @@ class ConnectionWS extends gbloc.Bloc {
   @override
   void dispose() {
     isConnect.close();
+    closeLastConnection();
+  }
+
+  closeLastConnection() {
     if (ws != null) {
       ws?.close();
     }
@@ -23,7 +27,7 @@ class ConnectionWS extends gbloc.Bloc {
   WebSocket? ws = null;
 
   void connect(String ip) async {
-    dispose();
+    closeLastConnection();
     isConnect.add(true);
     print("Se conecta");
     ws = await WebSocket.connect('ws://$ip:1323/ws')
