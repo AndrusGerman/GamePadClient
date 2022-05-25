@@ -76,18 +76,14 @@ class InputBoxCreator {
                     generateButtonType(
                         ButtonViewScreenType.buttonSimple, context);
                   },
-                  text: "Simple",
+                  text: "Simple (Button)",
                 ),
                 InputListTipeButton(
                   onTap: () {},
-                  text: "Example",
+                  text: "Mouse (joystick)",
                 ),
                 InputListTipeButton(
-                  onTap: () {},
-                  text: "Example",
-                ),
-                InputListTipeButton(
-                  text: "Cerrar",
+                  text: "**Cerrar**",
                   onTap: () {
                     Navigator.pop(context);
                   },
