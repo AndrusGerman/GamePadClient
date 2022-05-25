@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
+import 'package:game_pad_client/gamepad/repository/types_buttons.dart';
 
 class InputBoxCreator {
   final TextEditingController controllerSize =
@@ -66,11 +67,12 @@ class InputBoxCreator {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("¿Que tipo de boton agregaras?"),
+            title: const Text("¿Que tipo de boton agregaras?"),
             content: ListView(
               children: [
                 InputListTipeButton(
                   onTap: () {
+                    Navigator.pop(context);
                     generateButtonType(
                         ButtonViewScreenType.buttonSimple, context);
                   },
@@ -96,20 +98,77 @@ class InputBoxCreator {
         });
   }
 
+  final TextEditingController controllerCustom =
+      TextEditingController(text: "");
+
+  getButtonCode(BuildContext context, void Function(String code) callback) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("¿Cual es el boton que agregaras?"),
+            content: SizedBox(
+              height: 30,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  TextField(
+                    onChanged: (value) {},
+                    keyboardType: TextInputType.text,
+                    controller: controllerCustom,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (controllerCustom.text != "") {
+                        Navigator.pop(context);
+                        callback(controllerCustom.text);
+                      }
+                    },
+                    child: Container(
+                      child: Text("Guardar Personalizado"),
+                    ),
+                  ),
+                  ListView.builder(
+                    itemBuilder: ((context, index) {
+                      final item = GetButtonsTypeRepository().data[index];
+                      return ListTile(
+                        title: Text(item.getName()),
+                        onTap: () {
+                          callback(item.getCode());
+                        },
+                      );
+                    }),
+                    itemCount: GetButtonsTypeRepository().data.length,
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   generateButtonType(ButtonViewScreenType type, BuildContext context) {
     // Get Size
     final valueInt = int.parse(controllerSize.text).toDouble();
-    // Create
-    final button = ButtonViewScreen().setData(
-      position,
-      valueInt,
-      type,
-    );
-    // Set
-    BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
-        .sendButton(button);
-    // Close
-    Navigator.pop(context);
+    ButtonViewScreen button;
+
+    // Simple Button Generator
+    if (type == ButtonViewScreenType.buttonSimple) {
+      // Get Codes
+      getButtonCode(context, (code) {
+        // Generate button
+        button = ButtonViewScreen().setData(
+          position,
+          valueInt,
+          type,
+          [code],
+        );
+
+        // send
+        BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+            .sendButton(button);
+      });
+    }
   }
 }
 

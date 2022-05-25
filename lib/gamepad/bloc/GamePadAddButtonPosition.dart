@@ -11,12 +11,14 @@ class ButtonViewScreen {
   late double size;
   late ButtonViewScreenType type = ButtonViewScreenType.nulo;
   late int id;
+  late List<String> codes;
 
-  ButtonViewScreen setData(
-      Offset position, double size, ButtonViewScreenType type) {
+  ButtonViewScreen setData(Offset position, double size,
+      ButtonViewScreenType type, List<String> codes) {
     this.position = position;
     this.size = size;
     this.type = type;
+    this.codes = codes;
     return this;
   }
 }
