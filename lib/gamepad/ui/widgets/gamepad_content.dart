@@ -26,14 +26,14 @@ class GamePadContentWidget extends StatelessWidget {
         color: color,
         height: double.infinity,
         width: double.infinity,
-        child: ContentGamePadButtonsContainer(),
+        child: const ContentGamePadButtonsContainer(),
       );
     });
   }
 }
 
 class ContentGamePadButtonsContainer extends StatefulWidget {
-  ContentGamePadButtonsContainer({Key? key}) : super(key: key);
+  const ContentGamePadButtonsContainer({Key? key}) : super(key: key);
 
   @override
   State<ContentGamePadButtonsContainer> createState() =>
@@ -43,9 +43,16 @@ class ContentGamePadButtonsContainer extends StatefulWidget {
 class _ContentGamePadButtonsContainerState
     extends State<ContentGamePadButtonsContainer> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<GamePadAddButtonPositionCubit, ButtonViewScreen>(
       builder: (context, value) {
+        print("Llego el boton $value");
         if (value.type == ButtonViewScreenType.nulo) {
           return const Center(
             child: Text("nada",

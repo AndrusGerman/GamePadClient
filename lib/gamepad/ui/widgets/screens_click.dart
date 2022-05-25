@@ -21,8 +21,6 @@ class ScreenClickWidget extends StatelessWidget {
   }
 
   addButtonIn(Offset value) {
-    print("Vamos agregar un boton");
-
     InputBoxCreator().displayDialog(context, value);
     return;
   }

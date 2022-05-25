@@ -135,30 +135,6 @@ class InputBoxCreator {
         });
   }
 
-  generateCustomAdd(
-      BuildContext context, void Function(String code) callback, Widget item) {
-    final customAdd = Column(
-      children: [
-        TextField(
-          onChanged: (value) {},
-          keyboardType: TextInputType.text,
-          controller: controllerCustom,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            if (controllerCustom.text != "") {
-              Navigator.pop(context);
-              callback(controllerCustom.text);
-            }
-          },
-          child: const Text("Guardar Personalizado"),
-        ),
-        item,
-      ],
-    );
-    return customAdd;
-  }
-
   getButtonCode(BuildContext context, void Function(String code) callback) {
     final repository = GetButtonsTypeRepository();
 
@@ -175,7 +151,10 @@ class InputBoxCreator {
           );
 
           if (index == 0) {
-            return generateCustomAdd(context, callback, item);
+            return CustomAdd(
+                controllerCustom: controllerCustom,
+                callback: callback,
+                item: item);
           }
 
           return item;
@@ -199,14 +178,12 @@ class InputBoxCreator {
   generateButtonType(ButtonViewScreenType type, BuildContext context) {
     // Get Size
     final valueInt = int.parse(controllerSize.text).toDouble();
-    ButtonViewScreen button;
-
     // Simple Button Generator
     if (type == ButtonViewScreenType.buttonSimple) {
       // Get Codes
       getButtonCode(context, (code) {
         // Generate button
-        button = ButtonViewScreen().setData(
+        final button = ButtonViewScreen().setData(
           position,
           valueInt,
           type,
@@ -218,6 +195,41 @@ class InputBoxCreator {
             .sendButton(button);
       });
     }
+  }
+}
+
+class CustomAdd extends StatelessWidget {
+  final TextEditingController controllerCustom;
+  final Widget item;
+  final void Function(String code) callback;
+  const CustomAdd({
+    Key? key,
+    required this.controllerCustom,
+    required this.item,
+    required this.callback,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          onChanged: (value) {},
+          keyboardType: TextInputType.text,
+          controller: controllerCustom,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (controllerCustom.text != "") {
+              Navigator.pop(context);
+              callback(controllerCustom.text);
+            }
+          },
+          child: const Text("Guardar Personalizado"),
+        ),
+        item,
+      ],
+    );
   }
 }
 
