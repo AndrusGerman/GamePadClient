@@ -20,7 +20,9 @@ class ButtonSimpleGamePad extends StatelessWidget {
           width: 2.3,
         ),
       ),
-      child: Text(buttonData.codes[0]),
+      child: Center(
+        child: Text(buttonData.codes[0]),
+      ),
     );
 
     final position = Positioned(

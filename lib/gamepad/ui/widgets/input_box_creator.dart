@@ -176,7 +176,10 @@ class InputBoxCreator {
 
                     final item = ListTile(
                       title: Text(itemRepo.getName()),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                        callback(itemRepo.getCode());
+                      },
                     );
 
                     if (index == 0) {
