@@ -162,6 +162,26 @@ class InputBoxCreator {
   getButtonCode(BuildContext context, void Function(String code) callback) {
     final repository = GetButtonsTypeRepository();
 
+    final listViewItems = ListView.builder(
+        itemBuilder: (contextBuilder, index) {
+          final itemRepo = repository.data[index];
+
+          final item = ListTile(
+            title: Text(itemRepo.getName()),
+            onTap: () {
+              Navigator.pop(context);
+              callback(itemRepo.getCode());
+            },
+          );
+
+          if (index == 0) {
+            return generateCustomAdd(context, callback, item);
+          }
+
+          return item;
+        },
+        itemCount: repository.data.length);
+
     showDialog(
         context: primaryContext,
         builder: (context) {
@@ -170,25 +190,7 @@ class InputBoxCreator {
             content: SizedBox(
               height: 270,
               width: double.infinity,
-              child: ListView.builder(
-                  itemBuilder: (contextBuilder, index) {
-                    final itemRepo = repository.data[index];
-
-                    final item = ListTile(
-                      title: Text(itemRepo.getName()),
-                      onTap: () {
-                        Navigator.pop(context);
-                        callback(itemRepo.getCode());
-                      },
-                    );
-
-                    if (index == 0) {
-                      return generateCustomAdd(context, callback, item);
-                    }
-
-                    return item;
-                  },
-                  itemCount: repository.data.length),
+              child: listViewItems,
             ),
           );
         });
