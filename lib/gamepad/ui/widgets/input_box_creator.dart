@@ -135,7 +135,7 @@ class InputBoxCreator {
         });
   }
 
-  getButtonCode(BuildContext context, void Function(String code) callback) {
+  getButtonCode(void Function(String code) callback) {
     final repository = GetButtonsTypeRepository();
 
     final listViewItems = ListView.builder(
@@ -145,7 +145,7 @@ class InputBoxCreator {
           final item = ListTile(
             title: Text(itemRepo.getName()),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pop(contextBuilder);
               callback(itemRepo.getCode());
             },
           );
@@ -181,7 +181,7 @@ class InputBoxCreator {
     // Simple Button Generator
     if (type == ButtonViewScreenType.buttonSimple) {
       // Get Codes
-      getButtonCode(context, (code) {
+      getButtonCode((code) {
         // Generate button
         final button = ButtonViewScreen().setData(
           position,
