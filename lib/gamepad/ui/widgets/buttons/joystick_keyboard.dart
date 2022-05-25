@@ -2,6 +2,7 @@ import 'package:flutter_joystick/flutter_joystick.dart';
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_base.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class JoystickKeyboardGamePad extends StatelessWidget {
@@ -78,30 +79,20 @@ class JoystickKeyboardGamePad extends StatelessWidget {
         buttonData.codes[2], buttonData.codes[3]);
 
     final jos = Container(
-        child: Joystick(
-            mode: JoystickMode.all,
-            period: Duration(milliseconds: 70),
-            listener: listenerPosition,
-            onStickDragEnd: onStickDragEnd));
-    final containirSize = Container(
-      width: sizeBox,
-      height: sizeBox,
-      alignment: Alignment.center,
-      child: Center(
-        child: jos,
+      child: Joystick(
+        mode: JoystickMode.all,
+        period: Duration(milliseconds: 70),
+        listener: listenerPosition,
+        onStickDragEnd: onStickDragEnd,
+        base: JoystickBaseGamePad(size: sizeBox),
       ),
     );
+    final containirSize = Align(child: jos, alignment: Alignment.center);
 
     final position = Positioned(
       left: buttonData.position.dx - (sizeBox / 2),
       top: buttonData.position.dy - (sizeBox / 2),
-      child: GestureDetector(
-        onTapUp: onTapUp,
-        onTapDown: onTapDown,
-        onTapCancel: onTapCancel,
-        onTap: onTap,
-        child: containirSize,
-      ),
+      child: containirSize,
     );
 
     return position;
