@@ -220,9 +220,13 @@ class CustomAdd extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            if (controllerCustom.text != "") {
+            final val = controllerCustom.text;
+            if (val.length == 1) {
+              val.toUpperCase();
+            }
+            if (val != "") {
               Navigator.pop(context);
-              callback(controllerCustom.text);
+              callback(val);
             }
           },
           child: const Text("Guardar Personalizado"),
