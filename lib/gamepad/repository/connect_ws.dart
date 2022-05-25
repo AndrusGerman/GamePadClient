@@ -12,12 +12,12 @@ class ConnectionWS extends gbloc.Bloc {
     closeLastConnection();
   }
 
-  closeLastConnection() {
+  closeLastConnection() async {
     if (ws != null) {
-      ws?.close();
+      await ws?.close();
     }
     if (channel != null) {
-      channel?.sink.close();
+      await channel?.sink.close();
     }
   }
 
@@ -27,11 +27,10 @@ class ConnectionWS extends gbloc.Bloc {
   WebSocket? ws = null;
 
   void connect(String ip) async {
-    closeLastConnection();
-    isConnect.add(true);
-    print("Se conecta");
+    await closeLastConnection();
     ws = await WebSocket.connect('ws://$ip:1323/ws')
-        .timeout(Duration(seconds: 5));
+        .timeout(const Duration(seconds: 5));
+    isConnect.add(true);
     // Set config
     ws!.listen((event) {
       print("Inicia todo");

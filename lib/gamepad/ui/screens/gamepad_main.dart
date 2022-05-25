@@ -19,10 +19,6 @@ class GamePadUiMainScreen extends StatelessWidget {
       ),
       floatingActionButton: const FloatingScreensContainer(),
     );
-    // return BlocProvider(
-    //   create: (_) => GamePadModeCubit(),
-    //   child: appConten,
-    // );
 
     final laterBloc = gbloc.BlocProvider(
       bloc: ConnectionWS(),
