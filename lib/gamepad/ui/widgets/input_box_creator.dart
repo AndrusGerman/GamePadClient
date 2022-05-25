@@ -12,11 +12,16 @@ class InputBoxCreator {
   displayDialog(BuildContext context, Offset position) {
     primaryContext = context;
     this.position = position;
-    getSize(context);
+    getType();
   }
 
-  getSize(BuildContext context) {
-    showDialog(
+  controllerSizeSetValue(String value) {
+    controllerSize.value = controllerSize.value.copyWith(
+        text: value, selection: TextSelection.collapsed(offset: value.length));
+  }
+
+  Future getSize(BuildContext context) async {
+    await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -34,11 +39,8 @@ class InputBoxCreator {
                       }
                       // Set Max and min value
                       final valueInt = int.parse(value).toInt();
-                      if (valueInt < 0 || valueInt > 390) {
-                        controllerSize.value = controllerSize.value.copyWith(
-                            text: "390",
-                            selection:
-                                TextSelection.collapsed(offset: "390".length));
+                      if (valueInt < 30 || valueInt > 390) {
+                        controllerSizeSetValue("390");
                       }
                     },
                     keyboardType: TextInputType.number,
@@ -49,7 +51,6 @@ class InputBoxCreator {
                       onPressed: () {
                         if (controllerSize.text != "") {
                           Navigator.pop(context);
-                          getType();
                         }
                       },
                       child: Container(
@@ -73,16 +74,21 @@ class InputBoxCreator {
                 InputListTipeButton(
                   onTap: () {
                     Navigator.pop(context);
-                    generateButtonType(
-                        ButtonViewScreenType.buttonSimple, context);
+                    getSize(primaryContext).then((value) {
+                      generateButtonType(
+                          ButtonViewScreenType.buttonSimple, context);
+                    });
                   },
                   text: "Simple (Button)",
                 ),
                 InputListTipeButton(
                   onTap: () {
                     Navigator.pop(context);
-                    generateButtonType(
-                        ButtonViewScreenType.joystickMouse, context);
+                    controllerSizeSetValue("120");
+                    getSize(primaryContext).then((value) {
+                      generateButtonType(
+                          ButtonViewScreenType.joystickMouse, context);
+                    });
                   },
                   text: "Mouse (joystick)",
                 ),
