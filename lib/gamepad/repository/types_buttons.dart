@@ -1,5 +1,10 @@
 class GetButtonsTypeRepository {
-  final List<ButtonTypeInfo> data = [
+  final List<ButtonTypeInfo> dataMouse = [
+    ButtonTypeInfo("L", name: "Izquierda"),
+    ButtonTypeInfo("R", name: "Derecha"),
+  ];
+
+  final List<ButtonTypeInfo> dataKeyboard = [
     ButtonTypeInfo("Esc"),
     ButtonTypeInfo("1"),
     ButtonTypeInfo("2"),

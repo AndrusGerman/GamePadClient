@@ -7,15 +7,17 @@ class CircleButtonRaw extends StatelessWidget {
   late void Function(TapUpDetails)? onTapUp;
   late void Function(TapDownDetails)? onTapDown;
   late void Function()? onTapCancel;
+  Color color;
 
-  CircleButtonRaw({
-    Key? key,
-    required this.buttonData,
-    this.onTap,
-    this.onTapUp,
-    this.onTapCancel,
-    this.onTapDown,
-  }) : super(key: key);
+  CircleButtonRaw(
+      {Key? key,
+      required this.buttonData,
+      this.onTap,
+      this.onTapUp,
+      this.onTapCancel,
+      this.onTapDown,
+      this.color = Colors.blueAccent})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CircleButtonRaw extends StatelessWidget {
       width: sizeBox,
       height: sizeBox,
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: color,
         shape: BoxShape.circle,
         border: Border.all(
           color: Colors.black38,

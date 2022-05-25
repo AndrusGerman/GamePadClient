@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/repository/types_buttons.dart';
 
 class GenerateCodesButton {
-  Future<List> generate(
-      List<String> messages, BuildContext primaryContext) async {
+  Future<List> generate(List<String> messages, BuildContext primaryContext,
+      {bool isMouse = false}) async {
     // ListIterable
     final listaName = messages.map((e) async {
       final ctrl = TextEditingController(text: "");
-      await getButtonCode(primaryContext, ctrl, e);
+      await getButtonCode(primaryContext, ctrl, e, isMouse);
       return ctrl.text;
     });
 
@@ -20,12 +20,13 @@ class GenerateCodesButton {
   }
 
   getButtonCode(BuildContext primaryContext, TextEditingController controller,
-      String message) async {
+      String message, bool isMouse) async {
     final repository = GetButtonsTypeRepository();
+    final itemsRepo = isMouse ? repository.dataMouse : repository.dataKeyboard;
 
     final listViewItems = ListView.builder(
         itemBuilder: (contextBuilder, index) {
-          final itemRepo = repository.data[index];
+          final itemRepo = repository.dataKeyboard[index];
 
           final item = ListTile(
             title: Text(itemRepo.getName()),
@@ -35,13 +36,13 @@ class GenerateCodesButton {
             },
           );
 
-          if (index == 0) {
+          if (index == 0 && isMouse == false) {
             return CustomAdd(controllerCustom: controller, item: item);
           }
 
           return item;
         },
-        itemCount: repository.data.length);
+        itemCount: repository.dataKeyboard.length);
 
     await showDialog(
         context: primaryContext,

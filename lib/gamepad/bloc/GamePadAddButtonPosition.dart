@@ -27,5 +27,6 @@ enum ButtonViewScreenType {
   nulo,
   buttonSimple,
   joystickMouse,
-  joystickKeyboard
+  joystickKeyboard,
+  buttonMouse,
 }

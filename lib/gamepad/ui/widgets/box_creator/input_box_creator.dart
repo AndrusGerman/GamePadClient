@@ -84,6 +84,15 @@ class InputBoxCreator {
                 InputListTipeButton(
                   onTap: () {
                     Navigator.pop(context);
+                    getSize(primaryContext).then((value) {
+                      generateButtonType(ButtonViewScreenType.buttonMouse);
+                    });
+                  },
+                  text: "Simple (Button Mouse)",
+                ),
+                InputListTipeButton(
+                  onTap: () {
+                    Navigator.pop(context);
                     controllerSizeSetValue("120");
                     getSize(primaryContext).then((value) {
                       generateButtonType(ButtonViewScreenType.joystickMouse);
@@ -121,6 +130,25 @@ class InputBoxCreator {
       // Get Codes
       final response =
           (await GenerateCodesButton().generate(["principal"], primaryContext));
+
+      // Generate button
+      final button = ButtonViewScreen().setData(
+        position,
+        sizeButton,
+        type,
+        response,
+      );
+
+      // send
+      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+          .sendButton(button);
+    }
+
+    // Simple Button Mouse
+    if (type == ButtonViewScreenType.buttonMouse) {
+      // Get Codes
+      final response = (await GenerateCodesButton()
+          .generate(["principal"], primaryContext, isMouse: true));
 
       // Generate button
       final button = ButtonViewScreen().setData(
