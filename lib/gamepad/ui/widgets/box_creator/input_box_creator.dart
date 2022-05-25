@@ -96,7 +96,7 @@ class InputBoxCreator {
                     Navigator.pop(context);
                     controllerSizeSetValue("120");
                     getSize(primaryContext).then((value) {
-                      generateButtonType(ButtonViewScreenType.joystickMouse);
+                      generateButtonType(ButtonViewScreenType.joystickKeyboard);
                     });
                   },
                   text: "Keyboard (joystick)",
@@ -118,7 +118,6 @@ class InputBoxCreator {
     final sizeButton = int.parse(controllerSize.text).toDouble();
     // Simple Button Generator
     if (type == ButtonViewScreenType.buttonSimple) {
-      print("Aqui se crea la magia");
       // Get Codes
       final response =
           (await GenerateCodesButton().generate(["principal"], primaryContext));
@@ -144,6 +143,28 @@ class InputBoxCreator {
         sizeButton,
         type,
         [],
+      );
+      // send
+      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+          .sendButton(button);
+    }
+
+    // Joystick Keyboard
+    if (type == ButtonViewScreenType.joystickKeyboard) {
+      // Get Codes
+      final response = (await GenerateCodesButton().generate([
+        "Arriba",
+        "(<-) Izquierda",
+        "(->) Derecha",
+        "Abajo",
+      ], primaryContext));
+
+      // Generate button
+      final button = ButtonViewScreen().setData(
+        position,
+        sizeButton,
+        type,
+        response,
       );
       // send
       BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)

@@ -23,4 +23,9 @@ class ButtonViewScreen {
   }
 }
 
-enum ButtonViewScreenType { nulo, buttonSimple, joystickMouse }
+enum ButtonViewScreenType {
+  nulo,
+  buttonSimple,
+  joystickMouse,
+  joystickKeyboard
+}

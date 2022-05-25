@@ -20,22 +20,59 @@ class JoystickKeyboardGamePad extends StatelessWidget {
     this.onTapDown,
   }) : super(key: key);
 
+  covertInKeyboard(double x, y) {
+    var keys = [];
+    var keysRemove = [];
+
+    // Down
+    if (y >= 0.4) {
+      keys.add(position.down);
+    } else {
+      keysRemove.add(position.down);
+    }
+
+    // Up
+    if (y <= -0.4) {
+      keys.add(position.up);
+    } else {
+      keysRemove.add(position.up);
+    }
+
+    // Left
+    if (x >= 0.4) {
+      keys.add(position.left);
+    } else {
+      keysRemove.add(position.left);
+    }
+
+    // Right
+    if (x <= -0.4) {
+      keys.add(position.right);
+    } else {
+      keysRemove.add(position.right);
+    }
+
+    return "${keys.join(',')}|${keysRemove.join(',')}";
+  }
+
   listenerPosition(StickDragDetails details) {
-    bloc.sendSignalMouse(
-        EventWSCreator(1, 1, ValueX: details.x, ValueY: details.y));
+    final value = covertInKeyboard(details.x, details.y);
+    bloc.sendSignal(EventWSCreator(6, 1, Value: value));
   }
 
   onStickDragEnd() {
-    bloc.sendSignalMouse(EventWSCreator(1, 3));
+    bloc.sendSignal(EventWSCreator(6, 3, Value: allKeysJoin));
   }
 
   late ConnectionWS bloc;
   late _position position;
+  late String allKeysJoin;
 
   @override
   Widget build(BuildContext context) {
     bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
     final double sizeBox = buttonData.size;
+    this.allKeysJoin = buttonData.codes.join(',');
 
     this.position = _position(buttonData.codes[0], buttonData.codes[1],
         buttonData.codes[2], buttonData.codes[3]);
