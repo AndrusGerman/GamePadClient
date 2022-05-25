@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/buttons/button_simple.dart';
 
 class GamePadContentWidget extends StatelessWidget {
   const GamePadContentWidget({Key? key}) : super(key: key);
@@ -61,18 +62,6 @@ class _ContentGamePadButtonsContainerState
   List<Widget> buttons = [];
 
   newButton(ButtonViewScreen buttonData) {
-    final double sizeBox = buttonData.size;
-    final cont = Container(
-      width: sizeBox,
-      height: sizeBox,
-      color: Colors.black,
-    );
-
-    final ps = Positioned(
-      child: cont,
-      left: buttonData.position.dx - (sizeBox / 2),
-      top: buttonData.position.dy - (sizeBox / 2),
-    );
-    buttons.add(ps);
+    buttons.add(ButtonSimpleGamePad(buttonData: buttonData));
   }
 }
