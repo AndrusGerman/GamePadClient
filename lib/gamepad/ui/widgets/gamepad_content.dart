@@ -46,7 +46,10 @@ class _ContentGamePadButtonsContainerState
     return BlocBuilder<GamePadAddButtonPositionCubit, ButtonViewScreen>(
       builder: (context, value) {
         if (value.type == ButtonViewScreenType.nulo) {
-          return const Text("nada");
+          return const Center(
+            child: Text("nada",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+          );
         }
         newButton(value);
 
