@@ -40,7 +40,7 @@ class InputBoxCreator {
                       }
                       // Set Max and min value
                       final valueInt = int.parse(value).toInt();
-                      if (valueInt < 30 || valueInt > 390) {
+                      if (valueInt < 0 || valueInt > 390) {
                         controllerSizeSetValue("390");
                       }
                     },
