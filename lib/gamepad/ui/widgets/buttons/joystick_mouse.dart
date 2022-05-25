@@ -6,18 +6,9 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class JoystickMouseGamePad extends StatelessWidget {
   final ButtonViewScreen buttonData;
-  late void Function()? onTap;
-  late void Function(TapUpDetails)? onTapUp;
-  late void Function(TapDownDetails)? onTapDown;
-  late void Function()? onTapCancel;
-
   JoystickMouseGamePad({
     Key? key,
     required this.buttonData,
-    this.onTap,
-    this.onTapUp,
-    this.onTapCancel,
-    this.onTapDown,
   }) : super(key: key);
 
   listenerPosition(StickDragDetails details) {
@@ -54,13 +45,7 @@ class JoystickMouseGamePad extends StatelessWidget {
     final position = Positioned(
       left: buttonData.position.dx - (sizeBox / 2),
       top: buttonData.position.dy - (sizeBox / 2),
-      child: GestureDetector(
-        onTapUp: onTapUp,
-        onTapDown: onTapDown,
-        onTapCancel: onTapCancel,
-        onTap: onTap,
-        child: containirSize,
-      ),
+      child: containirSize,
     );
 
     return position;
