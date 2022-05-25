@@ -13,8 +13,12 @@ class GenerateCodesButton {
 
     List<String> response = [];
     for (var element in listaName) {
-      final data = await element;
-      response.add(data);
+      try {
+        final data = await element;
+        response.add(data);
+      } catch (err) {
+        throw err;
+      }
     }
     return response;
   }
@@ -49,13 +53,17 @@ class GenerateCodesButton {
         builder: (context) {
           return AlertDialog(
             title: Text("¿Cual es el boton que agregaras? " + message),
-            content: SizedBox(
-              height: 270,
-              width: double.infinity,
+            content: Container(
+              // height: 270,
+              // width: double.infinity,
               child: listViewItems,
             ),
           );
         });
+
+    if (controller.text == "") {
+      throw "button is not valid";
+    }
   }
 
   setControllerValue(String value, TextEditingController controller) {

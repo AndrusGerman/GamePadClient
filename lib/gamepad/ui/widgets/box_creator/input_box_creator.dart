@@ -27,9 +27,9 @@ class InputBoxCreator {
         builder: (context) {
           return AlertDialog(
             title: Text("Tamaño del elemento"),
-            content: SizedBox(
-              height: 110,
-              width: double.infinity,
+            content: Container(
+              // height: 0,
+              // width: double.infinity,
               child: Column(
                 children: [
                   TextField(
@@ -47,7 +47,6 @@ class InputBoxCreator {
                     keyboardType: TextInputType.number,
                     controller: controllerSize,
                   ),
-                  //IconButton(onPressed: () {}, icon: Icon(Icons.save))
                   ElevatedButton(
                       onPressed: () {
                         if (controllerSize.text != "") {
@@ -56,12 +55,25 @@ class InputBoxCreator {
                       },
                       child: Container(
                         child: Text("Guardar"),
+                      )),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        controllerSize.clear();
+                      },
+                      child: Container(
+                        child: Text("Cancelar"),
                       ))
                 ],
               ),
             ),
           );
         });
+
+    final value = controllerSize.text;
+    if (value == "" || value == "0") {
+      throw "Not valid";
+    }
   }
 
   getType() {
