@@ -43,9 +43,9 @@ class _ContentGamePadButtonsContainerState
     extends State<ContentGamePadButtonsContainer> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GamePadAddButtonPositionCubit, Offset>(
+    return BlocBuilder<GamePadAddButtonPositionCubit, ButtonViewScreen>(
       builder: (context, value) {
-        if (value.dx == 0 && value.dy == 0) {
+        if (value.type == ButtonViewScreenType.nulo) {
           return const Text("nada");
         }
         newButton(value);
@@ -57,17 +57,18 @@ class _ContentGamePadButtonsContainerState
 
   List<Widget> buttons = [];
 
-  newButton(Offset position) {
+  newButton(ButtonViewScreen buttonData) {
+    final double sizeBox = buttonData.size;
     final cont = Container(
-      width: 20,
-      height: 20,
+      width: sizeBox,
+      height: sizeBox,
       color: Colors.black,
     );
 
     final ps = Positioned(
       child: cont,
-      left: position.dx,
-      top: position.dy,
+      left: buttonData.position.dx - (sizeBox / 2),
+      top: buttonData.position.dy - (sizeBox / 2),
     );
     buttons.add(ps);
   }

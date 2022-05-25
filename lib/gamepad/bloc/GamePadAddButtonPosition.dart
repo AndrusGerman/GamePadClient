@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class GamePadAddButtonPositionCubit extends Cubit<Offset> {
-  GamePadAddButtonPositionCubit() : super(const Offset(0, 0));
-  setPosition(Offset value) => emit(value);
+class GamePadAddButtonPositionCubit extends Cubit<ButtonViewScreen> {
+  GamePadAddButtonPositionCubit() : super(ButtonViewScreen());
+  sendButton(ButtonViewScreen value) => emit(value);
 }
+
+class ButtonViewScreen {
+  late Offset position;
+  late double size;
+  late ButtonViewScreenType type = ButtonViewScreenType.nulo;
+  late int id;
+
+  ButtonViewScreen setData(
+      Offset position, double size, ButtonViewScreenType type) {
+    this.position = position;
+    this.size = size;
+    this.type = type;
+    return this;
+  }
+}
+
+enum ButtonViewScreenType { buttonSimple, nulo }
