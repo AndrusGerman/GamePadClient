@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_pad_client/gamepad/ui/screens/main.dart';
+import 'package:game_pad_client/gamepad/ui/screens/gamepad_main.dart';
 
 void main() {
   runApp(const MyApp());
