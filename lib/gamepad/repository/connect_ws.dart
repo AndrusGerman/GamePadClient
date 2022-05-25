@@ -10,6 +10,17 @@ class ConnectionWS extends gbloc.Bloc {
   void dispose() {
     isConnect.close();
     closeLastConnection();
+    _timer?.cancel();
+  }
+
+  autoConnect() {
+    if (_timer == null) {
+      _timer = Timer.periodic(const Duration(seconds: 3), (t) {
+        if (_isConnectBl == false) {
+          connect(defaultIP);
+        }
+      });
+    }
   }
 
   closeLastConnection() async {
@@ -22,6 +33,8 @@ class ConnectionWS extends gbloc.Bloc {
   }
 
   final isConnect = StreamController<bool>();
+  late Timer? _timer = null;
+  late bool _isConnectBl = false;
   late String defaultIP = "192.168.101.16";
 
   IOWebSocketChannel? channel = null;
@@ -32,6 +45,7 @@ class ConnectionWS extends gbloc.Bloc {
     ws = await WebSocket.connect('ws://$ip:1323/ws')
         .timeout(const Duration(seconds: 5));
     isConnect.add(true);
+    _isConnectBl = true;
     defaultIP = ip;
     // Set config
     ws!.listen((event) {
@@ -41,6 +55,7 @@ class ConnectionWS extends gbloc.Bloc {
     }, onDone: () {
       print("finish Close");
       isConnect.add(false);
+      _isConnectBl = false;
     }, cancelOnError: true);
 
     // Create channel
@@ -52,6 +67,7 @@ class ConnectionWS extends gbloc.Bloc {
       channel!.sink.add(salida.json());
     } else {
       isConnect.add(false);
+      _isConnectBl = false;
     }
   }
 
@@ -60,6 +76,7 @@ class ConnectionWS extends gbloc.Bloc {
       channel!.sink.add(salida.jsonMouse());
     } else {
       isConnect.add(false);
+      _isConnectBl = false;
     }
   }
 

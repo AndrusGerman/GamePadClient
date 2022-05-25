@@ -8,7 +8,6 @@ class GamePadModeCubit extends Cubit<GamePadModeIndex> {
   @override
   void onChange(Change<GamePadModeIndex> change) {
     super.onChange(change);
-    print("Mode get: $change");
   }
 }
 

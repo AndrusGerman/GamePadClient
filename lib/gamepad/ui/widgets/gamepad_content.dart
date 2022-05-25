@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
+import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/button_mouse.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/button_simple.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_keyboard.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_mouse.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class GamePadContentWidget extends StatelessWidget {
   const GamePadContentWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
+    bloc.autoConnect();
+
     return BlocBuilder<GamePadModeCubit, GamePadModeIndex>(
         builder: (context, value) {
       late MaterialColor color;
