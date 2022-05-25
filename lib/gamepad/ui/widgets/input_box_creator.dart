@@ -49,7 +49,7 @@ class InputBoxCreator {
                       onPressed: () {
                         if (controllerSize.text != "") {
                           Navigator.pop(context);
-                          getType(context);
+                          getType();
                         }
                       },
                       child: Container(
@@ -62,9 +62,9 @@ class InputBoxCreator {
         });
   }
 
-  getType(BuildContext context) {
+  getType() {
     showDialog(
-        context: context,
+        context: primaryContext,
         builder: (context) {
           return AlertDialog(
             title: const Text("¿Que tipo de boton agregaras?"),
@@ -101,14 +101,16 @@ class InputBoxCreator {
   final TextEditingController controllerCustom =
       TextEditingController(text: "");
 
-  getButtonCode(BuildContext context, void Function(String code) callback) {
+  getButtonCodex(BuildContext context, void Function(String code) callback) {
+    final repository = GetButtonsTypeRepository();
     showDialog(
-        context: context,
+        context: primaryContext,
         builder: (context) {
           return AlertDialog(
-            title: Text("¿Cual es el boton que agregaras?"),
+            title: Text(
+                "¿Cual es el boton que agregaras? ${repository.data.length}"),
             content: SizedBox(
-              height: 30,
+              height: 270,
               width: double.infinity,
               child: Column(
                 children: [
@@ -124,24 +126,66 @@ class InputBoxCreator {
                         callback(controllerCustom.text);
                       }
                     },
-                    child: Container(
-                      child: Text("Guardar Personalizado"),
-                    ),
+                    child: const Text("Guardar Personalizado"),
                   ),
-                  ListView.builder(
-                    itemBuilder: ((context, index) {
-                      final item = GetButtonsTypeRepository().data[index];
-                      return ListTile(
-                        title: Text(item.getName()),
-                        onTap: () {
-                          callback(item.getCode());
-                        },
-                      );
-                    }),
-                    itemCount: GetButtonsTypeRepository().data.length,
-                  )
                 ],
               ),
+            ),
+          );
+        });
+  }
+
+  generateCustomAdd(
+      BuildContext context, void Function(String code) callback, Widget item) {
+    final customAdd = Column(
+      children: [
+        TextField(
+          onChanged: (value) {},
+          keyboardType: TextInputType.text,
+          controller: controllerCustom,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (controllerCustom.text != "") {
+              Navigator.pop(context);
+              callback(controllerCustom.text);
+            }
+          },
+          child: const Text("Guardar Personalizado"),
+        ),
+        item,
+      ],
+    );
+    return customAdd;
+  }
+
+  getButtonCode(BuildContext context, void Function(String code) callback) {
+    final repository = GetButtonsTypeRepository();
+
+    showDialog(
+        context: primaryContext,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("¿Cual es el boton que agregaras?"),
+            content: SizedBox(
+              height: 270,
+              width: double.infinity,
+              child: ListView.builder(
+                  itemBuilder: (contextBuilder, index) {
+                    final itemRepo = repository.data[index];
+
+                    final item = ListTile(
+                      title: Text(itemRepo.getName()),
+                      onTap: () {},
+                    );
+
+                    if (index == 0) {
+                      return generateCustomAdd(context, callback, item);
+                    }
+
+                    return item;
+                  },
+                  itemCount: repository.data.length),
             ),
           );
         });
