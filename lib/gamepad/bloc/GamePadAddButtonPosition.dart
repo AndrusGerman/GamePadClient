@@ -14,11 +14,11 @@ class ButtonViewScreen {
   late List<String> codes;
 
   ButtonViewScreen setData(Offset position, double size,
-      ButtonViewScreenType type, List<String> codes) {
+      ButtonViewScreenType type, List<dynamic> codes) {
     this.position = position;
     this.size = size;
     this.type = type;
-    this.codes = codes;
+    this.codes = codes.map((e) => e.toString()).toList();
     return this;
   }
 }

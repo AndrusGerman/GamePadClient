@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/repository/types_buttons.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_button_code.dart';
 
 class InputBoxCreator {
   final TextEditingController controllerSize =
@@ -75,8 +76,7 @@ class InputBoxCreator {
                   onTap: () {
                     Navigator.pop(context);
                     getSize(primaryContext).then((value) {
-                      generateButtonType(
-                          ButtonViewScreenType.buttonSimple, context);
+                      generateButtonType(ButtonViewScreenType.buttonSimple);
                     });
                   },
                   text: "Simple (Button)",
@@ -86,11 +86,20 @@ class InputBoxCreator {
                     Navigator.pop(context);
                     controllerSizeSetValue("120");
                     getSize(primaryContext).then((value) {
-                      generateButtonType(
-                          ButtonViewScreenType.joystickMouse, context);
+                      generateButtonType(ButtonViewScreenType.joystickMouse);
                     });
                   },
                   text: "Mouse (joystick)",
+                ),
+                InputListTipeButton(
+                  onTap: () {
+                    Navigator.pop(context);
+                    controllerSizeSetValue("120");
+                    getSize(primaryContext).then((value) {
+                      generateButtonType(ButtonViewScreenType.joystickMouse);
+                    });
+                  },
+                  text: "Keyboard (joystick)",
                 ),
                 InputListTipeButton(
                   text: "**Cerrar**",
@@ -141,7 +150,7 @@ class InputBoxCreator {
         });
   }
 
-  getButtonCode(void Function(String code) callback) {
+  getButtonCodexdd(void Function(String code) callback) {
     final repository = GetButtonsTypeRepository();
 
     final listViewItems = ListView.builder(
@@ -159,7 +168,7 @@ class InputBoxCreator {
           if (index == 0) {
             return CustomAdd(
                 controllerCustom: controllerCustom,
-                callback: callback,
+                //callback: callback,
                 item: item);
           }
 
@@ -181,25 +190,27 @@ class InputBoxCreator {
         });
   }
 
-  generateButtonType(ButtonViewScreenType type, BuildContext context) {
+  generateButtonType(ButtonViewScreenType type) async {
     // Get Size
     final sizeButton = int.parse(controllerSize.text).toDouble();
     // Simple Button Generator
     if (type == ButtonViewScreenType.buttonSimple) {
+      print("Aqui se crea la magia");
       // Get Codes
-      getButtonCode((code) {
-        // Generate button
-        final button = ButtonViewScreen().setData(
-          position,
-          sizeButton,
-          type,
-          [code],
-        );
+      final response =
+          (await GenerateCodesButton().generate(["principal"], primaryContext));
 
-        // send
-        BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
-            .sendButton(button);
-      });
+      // Generate button
+      final button = ButtonViewScreen().setData(
+        position,
+        sizeButton,
+        type,
+        response,
+      );
+
+      // send
+      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+          .sendButton(button);
     }
 
     // Simple Joystick Mouse
@@ -215,45 +226,6 @@ class InputBoxCreator {
       BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
           .sendButton(button);
     }
-  }
-}
-
-class CustomAdd extends StatelessWidget {
-  final TextEditingController controllerCustom;
-  final Widget item;
-  final void Function(String code) callback;
-  const CustomAdd({
-    Key? key,
-    required this.controllerCustom,
-    required this.item,
-    required this.callback,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          onChanged: (value) {},
-          keyboardType: TextInputType.text,
-          controller: controllerCustom,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            final val = controllerCustom.text;
-            if (val.length == 1) {
-              val.toUpperCase();
-            }
-            if (val != "") {
-              Navigator.pop(context);
-              callback(val);
-            }
-          },
-          child: const Text("Guardar Personalizado"),
-        ),
-        item,
-      ],
-    );
   }
 }
 

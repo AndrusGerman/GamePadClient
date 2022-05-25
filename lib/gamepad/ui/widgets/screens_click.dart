@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
-import 'package:game_pad_client/gamepad/ui/widgets/input_box_creator.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/box_creator/input_box_creator.dart';
 
 class ScreenClickWidget extends StatelessWidget {
   final Widget child;
