@@ -7,18 +7,10 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class JoystickKeyboardGamePad extends StatelessWidget {
   final ButtonViewScreen buttonData;
-  late void Function()? onTap;
-  late void Function(TapUpDetails)? onTapUp;
-  late void Function(TapDownDetails)? onTapDown;
-  late void Function()? onTapCancel;
 
   JoystickKeyboardGamePad({
     Key? key,
     required this.buttonData,
-    this.onTap,
-    this.onTapUp,
-    this.onTapCancel,
-    this.onTapDown,
   }) : super(key: key);
 
   covertInKeyboard(double x, y) {
@@ -78,21 +70,25 @@ class JoystickKeyboardGamePad extends StatelessWidget {
     this.position = _position(buttonData.codes[0], buttonData.codes[1],
         buttonData.codes[2], buttonData.codes[3]);
 
-    final jos = Container(
-      child: Joystick(
-        mode: JoystickMode.all,
-        period: Duration(milliseconds: 70),
-        listener: listenerPosition,
-        onStickDragEnd: onStickDragEnd,
-        base: JoystickBaseGamePad(size: sizeBox),
-      ),
+    final joyStickAreaSize = sizeBox * 1.3;
+
+    final jos = JoystickArea(
+      mode: JoystickMode.all,
+      period: Duration(milliseconds: 70),
+      listener: listenerPosition,
+      onStickDragEnd: onStickDragEnd,
+      base: JoystickBaseGamePad(size: sizeBox),
     );
-    final containirSize = Align(child: jos, alignment: Alignment.center);
 
     final position = Positioned(
-      left: buttonData.position.dx - (sizeBox / 2),
-      top: buttonData.position.dy - (sizeBox / 2),
-      child: containirSize,
+      left: buttonData.position.dx - (joyStickAreaSize / 2),
+      top: buttonData.position.dy - (joyStickAreaSize / 2),
+      child: SafeArea(
+          child: Container(
+        width: joyStickAreaSize,
+        height: joyStickAreaSize,
+        child: jos,
+      )),
     );
 
     return position;
