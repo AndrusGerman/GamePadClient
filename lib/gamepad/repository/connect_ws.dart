@@ -53,6 +53,14 @@ class ConnectionWS extends gbloc.Bloc {
     }
   }
 
+  sendSignalMouse(EventWSCreator salida) {
+    if (channel != null) {
+      channel!.sink.add(salida.jsonMouse());
+    } else {
+      isConnect.add(false);
+    }
+  }
+
   void sendData() {}
 }
 
@@ -60,13 +68,25 @@ class EventWSCreator {
   final int Type;
   final String Value;
   final int Mode;
-  EventWSCreator(this.Type, this.Value, this.Mode);
+  final double ValueX;
+  final double ValueY;
+  EventWSCreator(this.Type, this.Mode,
+      {this.Value = "", this.ValueX = 0, this.ValueY = 0});
 
   String json() {
     return jsonEncode({
       'Type': Type,
       'Value': Value,
       'Mode': Mode,
+    });
+  }
+
+  String jsonMouse() {
+    return jsonEncode({
+      'Type': Type,
+      'Mode': Mode,
+      'ValueX': ValueX,
+      'ValueY': ValueY,
     });
   }
 }

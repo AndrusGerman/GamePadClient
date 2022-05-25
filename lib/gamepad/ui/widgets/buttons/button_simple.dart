@@ -17,14 +17,14 @@ class ButtonSimpleGamePad extends StatelessWidget {
       buttonData: buttonData,
       // Iniciar
       onTapDown: (details) {
-        bloc.sendSignal(EventWSCreator(2, buttonData.codes[0], 1));
+        bloc.sendSignal(EventWSCreator(2, 1, Value: buttonData.codes[0]));
       },
       // Cancelar
       onTapUp: (details) {
-        bloc.sendSignal(EventWSCreator(2, buttonData.codes[0], 3));
+        bloc.sendSignal(EventWSCreator(2, 3, Value: buttonData.codes[0]));
       },
       onTapCancel: () {
-        bloc.sendSignal(EventWSCreator(2, buttonData.codes[0], 3));
+        bloc.sendSignal(EventWSCreator(2, 3, Value: buttonData.codes[0]));
       },
     );
   }
