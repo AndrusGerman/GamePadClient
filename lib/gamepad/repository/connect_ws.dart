@@ -22,6 +22,7 @@ class ConnectionWS extends gbloc.Bloc {
   }
 
   final isConnect = StreamController<bool>();
+  late String defaultIP = "192.168.101.16";
 
   IOWebSocketChannel? channel = null;
   WebSocket? ws = null;
@@ -31,6 +32,7 @@ class ConnectionWS extends gbloc.Bloc {
     ws = await WebSocket.connect('ws://$ip:1323/ws')
         .timeout(const Duration(seconds: 5));
     isConnect.add(true);
+    defaultIP = ip;
     // Set config
     ws!.listen((event) {
       print("Inicia todo");

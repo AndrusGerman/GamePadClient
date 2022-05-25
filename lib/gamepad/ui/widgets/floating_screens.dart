@@ -60,8 +60,10 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
 
         final connect = FloatingScreenButtonButton(
             onPressed: () {
-              final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
-              bloc.connect("192.168.101.16");
+              connectWS(context);
+              // Play Mode
+              BlocProvider.of<GamePadModeCubit>(context)
+                  .setMode(GamePadModeIndex.playMode);
             },
             icon: Icons.connected_tv,
             color: color);
@@ -71,6 +73,42 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
       initialData: false,
       stream: bloc.isConnect.stream,
     );
+  }
+
+  connectWS(BuildContext context) async {
+    final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
+
+    final controller = TextEditingController(text: bloc.defaultIP);
+
+    await showDialog(
+        builder: (context) {
+          final alerDial = AlertDialog(
+              title: Text("IP"),
+              content: ListView(
+                children: [
+                  TextField(
+                    controller: controller,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (controller.text == "") {
+                          return;
+                        }
+                        Navigator.pop(context);
+                        // Intenta Conectar,
+                        bloc.connect(controller.text);
+                      },
+                      child: Container(
+                        child: Text("Conectar"),
+                      ))
+                ],
+              ));
+
+          return alerDial;
+        },
+        context: context);
+
+    controller.dispose();
   }
 }
 
