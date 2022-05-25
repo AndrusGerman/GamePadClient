@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/button_simple.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_mouse.dart';
 
 class GamePadContentWidget extends StatelessWidget {
   const GamePadContentWidget({Key? key}) : super(key: key);
@@ -69,6 +70,11 @@ class _ContentGamePadButtonsContainerState
   List<Widget> buttons = [];
 
   newButton(ButtonViewScreen buttonData) {
-    buttons.add(ButtonSimpleGamePad(buttonData: buttonData));
+    if (buttonData.type == ButtonViewScreenType.buttonSimple) {
+      buttons.add(ButtonSimpleGamePad(buttonData: buttonData));
+    }
+    if (buttonData.type == ButtonViewScreenType.joystickMouse) {
+      buttons.add(JoystickMouseGamePad(buttonData: buttonData));
+    }
   }
 }

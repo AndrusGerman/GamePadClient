@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 
-void Function() defaultNada = () {};
-
 class CircleButtonRaw extends StatelessWidget {
   final ButtonViewScreen buttonData;
   late void Function()? onTap;
@@ -21,7 +19,6 @@ class CircleButtonRaw extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    defaultNada();
     final double sizeBox = buttonData.size;
     final containirSize = Container(
       width: sizeBox,

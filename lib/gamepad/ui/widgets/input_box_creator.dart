@@ -20,7 +20,7 @@ class InputBoxCreator {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Tamaño del boton"),
+            title: Text("Tamaño del elemento"),
             content: SizedBox(
               height: 110,
               width: double.infinity,
@@ -79,7 +79,11 @@ class InputBoxCreator {
                   text: "Simple (Button)",
                 ),
                 InputListTipeButton(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    generateButtonType(
+                        ButtonViewScreenType.joystickMouse, context);
+                  },
                   text: "Mouse (joystick)",
                 ),
                 InputListTipeButton(
@@ -173,7 +177,7 @@ class InputBoxCreator {
 
   generateButtonType(ButtonViewScreenType type, BuildContext context) {
     // Get Size
-    final valueInt = int.parse(controllerSize.text).toDouble();
+    final sizeButton = int.parse(controllerSize.text).toDouble();
     // Simple Button Generator
     if (type == ButtonViewScreenType.buttonSimple) {
       // Get Codes
@@ -181,7 +185,7 @@ class InputBoxCreator {
         // Generate button
         final button = ButtonViewScreen().setData(
           position,
-          valueInt,
+          sizeButton,
           type,
           [code],
         );
@@ -190,6 +194,20 @@ class InputBoxCreator {
         BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
             .sendButton(button);
       });
+    }
+
+    // Simple Joystick Mouse
+    if (type == ButtonViewScreenType.joystickMouse) {
+      // Generate button
+      final button = ButtonViewScreen().setData(
+        position,
+        sizeButton,
+        type,
+        [],
+      );
+      // send
+      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+          .sendButton(button);
     }
   }
 }
