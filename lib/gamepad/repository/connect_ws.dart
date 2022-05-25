@@ -45,15 +45,29 @@ class ConnectionWS extends gbloc.Bloc {
     channel = IOWebSocketChannel(ws!);
   }
 
-  sendSignal() {
-    final salida = jsonEncode({
-      'Type': 2,
-      'Value': 'Volumenup',
-      'Mode': 1,
-    });
-
-    channel!.sink.add(salida);
+  sendSignal(EventWSCreator salida) {
+    if (channel != null) {
+      channel!.sink.add(salida.json());
+      print("Envio tap");
+    } else {
+      isConnect.add(false);
+    }
   }
 
   void sendData() {}
+}
+
+class EventWSCreator {
+  final int Type;
+  final String Value;
+  final int Mode;
+  EventWSCreator(this.Type, this.Value, this.Mode);
+
+  String json() {
+    return jsonEncode({
+      'Type': Type,
+      'Value': Value,
+      'Mode': Mode,
+    });
+  }
 }

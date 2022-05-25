@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
+import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/buttons/circle_button_raw.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class ButtonSimpleGamePad extends StatelessWidget {
   final ButtonViewScreen buttonData;
@@ -8,29 +11,21 @@ class ButtonSimpleGamePad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double sizeBox = buttonData.size;
-    final containirSize = Container(
-      width: sizeBox,
-      height: sizeBox,
-      decoration: BoxDecoration(
-        color: Colors.blueAccent,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.black38,
-          width: 2.3,
-        ),
-      ),
-      child: Center(
-        child: Text(buttonData.codes[0]),
-      ),
-    );
+    final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
 
-    final position = Positioned(
-      child: containirSize,
-      left: buttonData.position.dx - (sizeBox / 2),
-      top: buttonData.position.dy - (sizeBox / 2),
+    return CircleButtonRaw(
+      buttonData: buttonData,
+      // Iniciar
+      onTapDown: (details) {
+        bloc.sendSignal(EventWSCreator(2, buttonData.codes[0], 1));
+      },
+      // Cancelar
+      onTapUp: (details) {
+        bloc.sendSignal(EventWSCreator(2, buttonData.codes[0], 3));
+      },
+      onTapCancel: () {
+        bloc.sendSignal(EventWSCreator(2, buttonData.codes[0], 3));
+      },
     );
-
-    return position;
   }
 }
