@@ -16,7 +16,6 @@ class ConnectionWS extends gbloc.Bloc {
   void dispose() {
     isConnect.close();
     closeLastConnection();
-    _timer?.cancel();
   }
 
   Future<String> getIPDefault() async {
@@ -33,16 +32,6 @@ class ConnectionWS extends gbloc.Bloc {
     prefs?.setString("ip", ip);
   }
 
-  autoConnect() async {
-    return;
-    _timer ??= Timer.periodic(const Duration(seconds: 3), (t) async {
-      if (_isConnectBl == false) {
-        var dataIP = await getIPDefault();
-        connect(dataIP);
-      }
-    });
-  }
-
   closeLastConnection() async {
     if (ws != null) {
       await ws?.close();
@@ -53,31 +42,20 @@ class ConnectionWS extends gbloc.Bloc {
   }
 
   final isConnect = StreamController<bool>();
-  late Timer? _timer = null;
-  late bool _isConnectBl = false;
 
   IOWebSocketChannel? channel = null;
   WebSocket? ws = null;
 
   void connect(String ip) async {
     await closeLastConnection();
-    print("Intenta conectar a $ip | 'ws://$ip:8992/ws'");
     ws = await WebSocket.connect('ws://$ip:8992/ws')
         .timeout(const Duration(seconds: 7));
 
-    print("Intenta conectar paso 2");
     isConnect.add(true);
-    _isConnectBl = true;
 
     // Set config
-    ws!.listen((event) {
-      print("In_isConnectBlicia todo");
-    }, onError: (event) {
-      print("No se pudo conectar");
-    }, onDone: () {
-      print("finish Close");
+    ws!.listen((event) {}, onError: (event) {}, onDone: () {
       isConnect.add(false);
-      _isConnectBl = false;
     }, cancelOnError: true);
 
     // Create channel
@@ -89,7 +67,6 @@ class ConnectionWS extends gbloc.Bloc {
       channel!.sink.add(salida.json());
     } else {
       isConnect.add(false);
-      _isConnectBl = false;
     }
   }
 
@@ -98,7 +75,6 @@ class ConnectionWS extends gbloc.Bloc {
       channel!.sink.add(salida.jsonMouse());
     } else {
       isConnect.add(false);
-      _isConnectBl = false;
     }
   }
 
