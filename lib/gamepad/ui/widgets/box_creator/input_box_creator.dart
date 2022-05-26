@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
-import 'package:game_pad_client/gamepad/repository/buttonViewScreen.dart';
+import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_button_code.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 

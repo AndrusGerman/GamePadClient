@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class ButtonViewScreen {
@@ -15,6 +17,8 @@ class ButtonViewScreen {
     this.codes = codes.map((e) => e.toString()).toList();
     return this;
   }
+
+  asJsonString() {}
 }
 
 enum ButtonViewScreenType {
