@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/repository/types_buttons.dart';
+import 'package:game_pad_client/ui/widgets/dialog.dart';
 
 class GenerateCodesButton {
   Future<List> generate(List<String> messages, BuildContext primaryContext,
@@ -48,18 +49,9 @@ class GenerateCodesButton {
         },
         itemCount: itemsRepo.length);
 
-    await showDialog(
-        context: primaryContext,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("¿Cual es el boton que agregaras? " + message),
-            content: Container(
-              // height: 270,
-              // width: double.infinity,
-              child: listViewItems,
-            ),
-          );
-        });
+    final title = Text("¿Cual es el boton que agregaras? $message");
+
+    await CreateDialog(primaryContext).openSimple(title, listViewItems);
 
     if (controller.text == "") {
       throw "button is not valid";
