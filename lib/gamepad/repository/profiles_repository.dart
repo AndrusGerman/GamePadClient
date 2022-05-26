@@ -18,6 +18,7 @@ class ProfileRepository {
     final profile = ProfileModel();
     profile.name = name;
     profile.buttons = buttons;
+    profile.id = DateTime.now().microsecondsSinceEpoch;
     return profile;
   }
 

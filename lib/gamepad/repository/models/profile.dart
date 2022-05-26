@@ -4,7 +4,7 @@ import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart'
 
 class ProfileModel {
   late String name = "Por Defecto";
-
+  late int id = 0;
   late List<ButtonViewScreenModel> buttons;
 
   String getJson() {
@@ -12,6 +12,7 @@ class ProfileModel {
     final mapa = {
       'name': name,
       'buttons': buttonsStr,
+      'id': id,
     };
     return jsonEncode(mapa);
   }
@@ -20,6 +21,10 @@ class ProfileModel {
     final Map<String, dynamic> x = jsonDecode(text);
 
     name = x['name'] as String;
+
+    try {
+      id = x['id'] as int;
+    } catch (err) {}
 
     final List<String> listStr =
         List<String>.from(x['buttons'] as List<dynamic>);

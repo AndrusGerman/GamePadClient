@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:game_pad_client/bloc/storage_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/bloc/ProfilesBloc.dart';
+import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
 import 'package:game_pad_client/gamepad/repository/models/profile.dart';
 import 'package:game_pad_client/gamepad/repository/profiles_repository.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
@@ -20,6 +21,42 @@ class ProfileSettingsGamePad extends StatefulWidget {
 class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
   final profileName = TextEditingController(text: "Perfil Por Defecto");
 
+  selectProfile(List<ButtonViewScreenModel> buttons) {
+    widget.gpab.setAll(buttons);
+  }
+
+  createProfile() {
+    // storage
+    final repo = ProfileRepository(widget.storageBloc.storage!);
+    final blocProfiles = BlocProvider.of<ProfilesBloc>(context);
+
+    // add profile
+    final newProfile =
+        repo.generateProfile(profileName.text, widget.gpab.listaData);
+    blocProfiles.addProfile(newProfile);
+
+// save
+    repo.saveProfiles(blocProfiles.listProfiles);
+  }
+
+  removeProfile(int idProfile) {
+    // storage
+    final repo = ProfileRepository(widget.storageBloc.storage!);
+    final blocProfiles = BlocProvider.of<ProfilesBloc>(context);
+    final listProfile = repo.getProfiles();
+
+    // get Remove Element
+    final indexRemove =
+        listProfile.indexWhere((element) => element.id == idProfile);
+
+    // remove
+    listProfile.removeAt(indexRemove);
+
+    // save
+    blocProfiles.setProfiles(listProfile);
+    repo.saveProfiles(blocProfiles.listProfiles);
+  }
+
   @override
   Widget build(BuildContext context) {
     final repo = ProfileRepository(widget.storageBloc.storage!);
@@ -32,11 +69,7 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
         ),
         ElevatedButton(
             onPressed: () {
-              final newProfile =
-                  repo.generateProfile(profileName.text, widget.gpab.listaData);
-              blocProfiles.addProfile(newProfile);
-
-              repo.saveProfiles(blocProfiles.listProfiles);
+              createProfile();
             },
             child: const Text("Guardar Perfil")),
         StreamBuilder(
@@ -45,8 +78,13 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
               return const Text("Sin perfiles disponibles...");
             }
             // List Profiles
-            final profiles =
-                snapshot.data!.map((e) => _ProfilesTiles(profile: e)).toList();
+            final profiles = snapshot.data!
+                .map((e) => _ProfilesTiles(
+                      profile: e,
+                      clickProfile: selectProfile,
+                      removeProfile: removeProfile,
+                    ))
+                .toList();
 
             return Column(
               children: profiles,
@@ -69,16 +107,28 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
 
 class _ProfilesTiles extends StatelessWidget {
   final ProfileModel profile;
-  const _ProfilesTiles({Key? key, required this.profile}) : super(key: key);
+  final void Function(int) removeProfile;
+  final void Function(List<ButtonViewScreenModel> buttons) clickProfile;
+  const _ProfilesTiles(
+      {Key? key,
+      required this.profile,
+      required this.clickProfile,
+      required this.removeProfile})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(profile.name),
       leading: const Icon(Icons.person),
-      onTap: () {},
+      onTap: () {
+        clickProfile(profile.buttons);
+        Navigator.pop(context);
+      },
       trailing: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            this.removeProfile(profile.id);
+          },
           icon: const Icon(
             Icons.remove_circle,
             color: Colors.red,
