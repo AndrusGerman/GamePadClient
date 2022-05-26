@@ -50,7 +50,7 @@ class GenerateCodesButton {
         },
         itemCount: itemsRepo.length);
 
-    final title = Text("¿Cual es el boton que agregaras? $message");
+    final title = ("¿Cual es el boton que agregaras? $message");
 
     await CreateModal(primaryContext).bottomSheet(title, listViewItems);
 

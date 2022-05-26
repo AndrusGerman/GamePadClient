@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/floating_buttons.dart/floating_screen_button.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
+import 'package:game_pad_client/ui/widgets/modal.dart';
 import 'package:game_pad_client/ui/widgets/snack_bar.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
@@ -119,7 +120,7 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
     );
 
     // ignore: use_build_context_synchronously
-    await CreateDialog(context).openSimple(const Text("IP: //"), listView);
+    await CreateModal(context).bottomSheet(("IP: //"), listView);
 
     stremEnableIP.close();
   }

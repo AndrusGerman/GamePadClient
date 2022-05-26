@@ -31,8 +31,7 @@ class InputBoxCreator {
       controllerSizeSetValue: controllerSizeSetValue,
     );
 
-    await CreateModal(primaryContext)
-        .bottomSheet(const Text("Tamaño del elemento"), wid);
+    await CreateModal(primaryContext).bottomSheet(("Tamaño del elemento"), wid);
 
     final value = controllerSize.text;
     if (value == "" || value == "0") {
@@ -50,7 +49,7 @@ class InputBoxCreator {
     final dCtr = CreateModal(primaryContext);
     final dialog = BoxCreatorGetType(
         controllerSizeSetValue: controllerSizeSetValue, goToSize: goToGetSize);
-    dCtr.bottomSheet(const Text("¿Que tipo de boton agregaras?"), dialog);
+    dCtr.bottomSheet(("¿Que tipo de boton agregaras?"), dialog);
   }
 
   generateButtonType(ButtonViewScreenType type) async {

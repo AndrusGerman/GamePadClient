@@ -28,7 +28,7 @@ class ViewListSimpleSettings extends StatelessWidget {
                 ProfileSettingsGamePad(gpab: gpab, storageBloc: storageBloc);
 
             CreateModal(context).bottomSheet(
-                const Text("Perfiles"),
+                ("Perfiles"),
                 provider.BlocProvider(
                   bloc: ProfilesBloc(),
                   child: widget,

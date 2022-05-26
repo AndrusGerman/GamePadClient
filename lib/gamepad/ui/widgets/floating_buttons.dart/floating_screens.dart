@@ -53,7 +53,7 @@ class FloatingScreensContainer extends StatelessWidget {
               final storageBloc =
                   provider.BlocProvider.of<StorageBloc>(context);
 
-              CreateModal(context).bottomSheet(const Text("Settings"),
+              CreateModal(context).bottomSheet(("Settings"),
                   ViewListSimpleSettings(gpab: gpap, storageBloc: storageBloc));
             },
             icon: Icons.settings),
