@@ -57,7 +57,6 @@ class _ContentGamePadButtonsContainerState
   Widget build(BuildContext context) {
     return BlocBuilder<GamePadAddButtonPositionCubit, ButtonViewScreen>(
       builder: (context, value) {
-        print("Llego el boton $value");
         if (value.type == ButtonViewScreenType.nulo) {
           return const Center(
             child: Text("nada",

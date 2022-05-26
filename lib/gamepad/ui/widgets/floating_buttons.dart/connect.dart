@@ -43,9 +43,9 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
   }
 
   connectWS(BuildContext context) async {
-    final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
+    final wsbloc = gbloc.BlocProvider.of<ConnectionWS>(context);
 
-    final defaultIP = await bloc.getIPDefault();
+    final defaultIP = await wsbloc.getIPDefault();
     final controller = TextEditingController(text: defaultIP);
     final stremEnableIP = StreamController<int>();
 
@@ -78,15 +78,15 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
                 return;
               }
               SnackBarGamePad(context).success("Ping correcto");
-              bloc.connect(ip);
+              wsbloc.connect(ip);
               Navigator.pop(context);
-              bloc.setIPDefault(ip);
+              wsbloc.setIPDefault(ip);
             });
           },
-          child: const Text("Conectar"),
           style: ElevatedButton.styleFrom(
             primary: colorButton,
           ),
+          child: const Text("Conectar"),
         );
       },
     );
@@ -114,13 +114,13 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
                           return;
                         }
                         SnackBarGamePad(context).success("Ping correcto");
-                        bloc.connect("localhost");
+                        wsbloc.connect("localhost");
                         Navigator.pop(context);
                       });
                     },
-                    child: const Text("Local (USB)"),
                     style:
                         ElevatedButton.styleFrom(primary: Colors.greenAccent),
+                    child: const Text("Local (USB)"),
                   )
                 ],
               ));

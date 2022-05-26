@@ -7,9 +7,10 @@ import 'package:web_socket_channel/io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionWS extends gbloc.Bloc {
-  late SharedPreferences? prefs;
-  ConnectionWS() {
-    SharedPreferences.getInstance().then((value) => prefs = value);
+  final SharedPreferences? prefs;
+  ConnectionWS(this.prefs) {
+    ws = null;
+    channel = null;
   }
 
   @override
@@ -19,12 +20,7 @@ class ConnectionWS extends gbloc.Bloc {
   }
 
   Future<String> getIPDefault() async {
-    print("getIPDefault: 2");
-
     var dataIP = prefs?.getString("ip") ?? "192.168.101.16";
-
-    print("getIPDefault: 3");
-
     return dataIP;
   }
 
@@ -43,8 +39,8 @@ class ConnectionWS extends gbloc.Bloc {
 
   final isConnect = StreamController<bool>();
 
-  IOWebSocketChannel? channel = null;
-  WebSocket? ws = null;
+  IOWebSocketChannel? channel;
+  WebSocket? ws;
 
   void connect(String ip) async {
     await closeLastConnection();
