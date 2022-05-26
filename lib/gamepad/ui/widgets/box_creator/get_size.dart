@@ -28,23 +28,29 @@ class BoxCreatorGetSize extends StatelessWidget {
           keyboardType: TextInputType.number,
           controller: controllerSize,
         ),
-        ElevatedButton(
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
             onPressed: () {
               if (controllerSize.text != "") {
                 Navigator.pop(context);
               }
             },
-            child: Container(
-              child: Text("Guardar"),
-            )),
-        ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Colors.blue),
+            child: const Text("Guardar"),
+          ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               controllerSize.clear();
             },
-            child: Container(
-              child: Text("Cancelar"),
-            ))
+            style: ElevatedButton.styleFrom(primary: Colors.red),
+            child: const Text("Cancelar"),
+          ),
+        )
       ],
     );
 

@@ -12,6 +12,7 @@ class BoxCreatorInputListTipeButton extends StatelessWidget {
     return ListTile(
       title: Text(text),
       onTap: onTap,
+      leading: const Icon(Icons.remove),
     );
   }
 }
