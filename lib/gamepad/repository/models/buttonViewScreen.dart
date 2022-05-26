@@ -18,7 +18,7 @@ class ButtonViewScreenModel {
     return this;
   }
 
-  String asJsonString() {
+  String getJson() {
     final map = {
       'position': {'x': position.dx, 'y': position.dy},
       'size': size,
@@ -30,7 +30,7 @@ class ButtonViewScreenModel {
     return jsonEncode(map);
   }
 
-  setDataByJSON(String data) {
+  setJson(String data) {
     final Map<String, dynamic> mapa = jsonDecode(data);
     final Map<String, dynamic> positionRaw = mapa['position'];
 
