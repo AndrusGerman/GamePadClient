@@ -41,7 +41,13 @@ class GamePadUiMainScreen extends StatelessWidget {
           bloc: StorageBloc(snapshot.data),
           child: wsBloc,
         );
-        return storageBloc;
+
+        // GamePaddAddButtonsPosition
+        final gamePadGenericadd = gbloc.BlocProvider(
+          bloc: GamePadAddButtonPositionBloc(),
+          child: storageBloc,
+        );
+        return gamePadGenericadd;
       }),
       future: SharedPreferences.getInstance(),
       initialData: null,
@@ -49,7 +55,8 @@ class GamePadUiMainScreen extends StatelessWidget {
 
     return MultiBlocProvider(providers: [
       BlocProvider(create: (_) => GamePadModeCubit()),
-      BlocProvider(create: (_) => GamePadAddButtonPositionCubit()),
+      //BlocProvider(create: (_) => GamePadAddButtonPositionCubit()),
+      //BlocProvider(create: (_) => BlocExample(null))
     ], child: providerBloc);
   }
 }

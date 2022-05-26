@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
-import 'package:game_pad_client/gamepad/repository/types_buttons.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_button_code.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class InputBoxCreator {
   final TextEditingController controllerSize =
@@ -152,7 +152,7 @@ class InputBoxCreator {
       );
 
       // send
-      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+      provider.BlocProvider.of<GamePadAddButtonPositionBloc>(primaryContext)
           .sendButton(button);
     }
 
@@ -171,7 +171,7 @@ class InputBoxCreator {
       );
 
       // send
-      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+      provider.BlocProvider.of<GamePadAddButtonPositionBloc>(primaryContext)
           .sendButton(button);
     }
 
@@ -185,7 +185,7 @@ class InputBoxCreator {
         [],
       );
       // send
-      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+      provider.BlocProvider.of<GamePadAddButtonPositionBloc>(primaryContext)
           .sendButton(button);
     }
 
@@ -207,7 +207,7 @@ class InputBoxCreator {
         response,
       );
       // send
-      BlocProvider.of<GamePadAddButtonPositionCubit>(primaryContext)
+      provider.BlocProvider.of<GamePadAddButtonPositionBloc>(primaryContext)
           .sendButton(button);
     }
   }

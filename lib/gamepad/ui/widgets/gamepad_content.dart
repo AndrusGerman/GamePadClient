@@ -6,6 +6,7 @@ import 'package:game_pad_client/gamepad/ui/widgets/buttons/button_mouse.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/button_simple.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_keyboard.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_mouse.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class GamePadContentWidget extends StatelessWidget {
   const GamePadContentWidget({Key? key}) : super(key: key);
@@ -48,44 +49,47 @@ class ContentGamePadButtonsContainer extends StatefulWidget {
 class _ContentGamePadButtonsContainerState
     extends State<ContentGamePadButtonsContainer> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GamePadAddButtonPositionCubit, ButtonViewScreen>(
-      builder: (context, value) {
-        if (value.type == ButtonViewScreenType.nulo) {
-          return const Center(
-            child: Text("nada",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-          );
-        }
-        newButton(value);
+    final gpap =
+        provider.BlocProvider.of<GamePadAddButtonPositionBloc>(context);
 
-        return Stack(children: buttons);
+    return StreamBuilder(
+      builder: (context, AsyncSnapshot<List<dynamic>> value) {
+        const nada = Center(
+          child: Text("nada",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+        );
+
+        if (value.data == null) {
+          return nada;
+        }
+        if (value.data!.isEmpty) {
+          return nada;
+        }
+
+        // Lista de botones
+        final wid = value.data!.map((e) => newButton(e)).toList();
+        return Stack(children: wid);
       },
+      stream: gpap.listDataController.stream,
     );
   }
 
-  List<Widget> buttons = [];
-
-  newButton(ButtonViewScreen buttonData) {
+  Widget newButton(ButtonViewScreen buttonData) {
     if (buttonData.type == ButtonViewScreenType.buttonSimple) {
-      buttons.add(ButtonSimpleGamePad(buttonData: buttonData));
+      return (ButtonSimpleGamePad(buttonData: buttonData));
     }
     if (buttonData.type == ButtonViewScreenType.joystickMouse) {
-      buttons.add(JoystickMouseGamePad(buttonData: buttonData));
+      return (JoystickMouseGamePad(buttonData: buttonData));
     }
 
     if (buttonData.type == ButtonViewScreenType.joystickKeyboard) {
-      buttons.add(JoystickKeyboardGamePad(buttonData: buttonData));
+      return (JoystickKeyboardGamePad(buttonData: buttonData));
     }
 
     if (buttonData.type == ButtonViewScreenType.buttonMouse) {
-      buttons.add(ButtonSimpleMouseGamePad(buttonData: buttonData));
+      return (ButtonSimpleMouseGamePad(buttonData: buttonData));
     }
+    return Container();
   }
 }

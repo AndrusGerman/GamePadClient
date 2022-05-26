@@ -1,15 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 
-class GamePadAddButtonPositionCubit extends Cubit<ButtonViewScreen> {
-  GamePadAddButtonPositionCubit() : super(ButtonViewScreen());
-  sendButton(ButtonViewScreen value) => emit(value);
+import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+
+class GamePadAddButtonPositionBloc extends Bloc {
+  List<ButtonViewScreen> listaData = [];
+
+  sendButton(ButtonViewScreen value) {
+    print("1:Emitir");
+    listaData.add(value);
+    listDataController.add(listaData);
+    print("2:Fin de emitir");
+  }
+
+  final listDataController = StreamController<List<ButtonViewScreen>>();
+
+  @override
+  void dispose() {
+    listDataController.close();
+  }
 }
 
 class ButtonViewScreen {
   late Offset position;
   late double size;
-  late ButtonViewScreenType type = ButtonViewScreenType.nulo;
+  late ButtonViewScreenType type;
   late int id;
   late List<String> codes;
 
@@ -24,7 +39,6 @@ class ButtonViewScreen {
 }
 
 enum ButtonViewScreenType {
-  nulo,
   buttonSimple,
   joystickMouse,
   joystickKeyboard,
