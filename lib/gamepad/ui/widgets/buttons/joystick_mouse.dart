@@ -32,7 +32,7 @@ class JoystickMouseGamePad extends StatelessWidget {
 
     final jos = JoystickArea(
       mode: JoystickMode.all,
-      period: Duration(milliseconds: 70),
+      period: Duration(milliseconds: 12),
       listener: listenerPosition,
       onStickDragEnd: onStickDragEnd,
       base: JoystickBaseGamePad(size: sizeBox),
