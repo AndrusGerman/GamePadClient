@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/bloc/storage_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
@@ -20,7 +22,7 @@ class ProfileSettingsGamePad extends StatefulWidget {
 
 class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
   final profileName = TextEditingController(text: "Perfil Por Defecto");
-
+  final profileNameFocus = FocusNode();
   selectProfile(List<ButtonViewScreenModel> buttons) {
     widget.gpab.setAll(buttons);
   }
@@ -35,8 +37,17 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
         repo.generateProfile(profileName.text, widget.gpab.listaData);
     blocProfiles.addProfile(newProfile);
 
-// save
+    // save
     repo.saveProfiles(blocProfiles.listProfiles);
+
+    setDefaultText(blocProfiles.listProfiles);
+  }
+
+  setDefaultText(List<ProfileModel> listProfiles) {
+    // set state
+    formField.currentState?.setState(() {
+      setText("Perfil ${listProfiles.length}");
+    });
   }
 
   removeProfile(int idProfile) {
@@ -55,26 +66,39 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
     // save
     blocProfiles.setProfiles(listProfile);
     repo.saveProfiles(blocProfiles.listProfiles);
+
+    // change input
+    setDefaultText(blocProfiles.listProfiles);
   }
+
+  final formField = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final repo = ProfileRepository(widget.storageBloc.storage!);
     final blocProfiles = BlocProvider.of<ProfilesBloc>(context);
     blocProfiles.setProfiles(repo.getProfiles());
+
+    final textFiled = FormField(builder: (state) {
+      return TextFormField(
+        controller: profileName,
+        focusNode: profileNameFocus,
+      );
+    });
     return ListView(
       children: [
-        TextField(
-          controller: profileName,
-        ),
+        Form(child: textFiled, key: formField),
         ElevatedButton(
-            onPressed: () {
-              createProfile();
-            },
-            child: const Text("Guardar Perfil")),
+          onPressed: () {
+            createProfile();
+          },
+          child: const Text("Guardar Perfil"),
+        ),
         StreamBuilder(
           builder: ((context, AsyncSnapshot<List?> snapshot) {
+            profileNameFocus.unfocus();
             if (snapshot.data!.isEmpty) {
+              setText("Perfil Por Defecto");
               return const Text("Sin perfiles disponibles...");
             }
             // List Profiles
@@ -99,9 +123,17 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
 
   @override
   void dispose() {
-    this.profileName.dispose();
-    // TODO: implement dispose
+    profileName.dispose();
     super.dispose();
+  }
+
+  _controllerSet(String value) {
+    profileName.value = profileName.value.copyWith(
+        text: value, selection: TextSelection.collapsed(offset: value.length));
+  }
+
+  setText(String value) {
+    _controllerSet(value);
   }
 }
 
