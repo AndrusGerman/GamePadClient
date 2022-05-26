@@ -4,6 +4,7 @@ import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/bloc/ProfilesBloc.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/settings/profiles.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
+import 'package:game_pad_client/ui/widgets/modal.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class ViewListSimpleSettings extends StatelessWidget {
@@ -26,7 +27,7 @@ class ViewListSimpleSettings extends StatelessWidget {
             final widget =
                 ProfileSettingsGamePad(gpab: gpab, storageBloc: storageBloc);
 
-            CreateDialog(context).openSimple(
+            CreateModal(context).bottomSheet(
                 const Text("Perfiles"),
                 provider.BlocProvider(
                   bloc: ProfilesBloc(),
@@ -37,9 +38,7 @@ class ViewListSimpleSettings extends StatelessWidget {
         _ViewListSimpleItem(
           icon: Icons.wifi,
           title: "Latencia",
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () {},
         ),
         _ViewListSimpleItem(
           icon: Icons.clear,

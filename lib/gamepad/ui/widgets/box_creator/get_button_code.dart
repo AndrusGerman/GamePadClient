@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/repository/types_buttons.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
+import 'package:game_pad_client/ui/widgets/modal.dart';
 
 class GenerateCodesButton {
   Future<List> generate(List<String> messages, BuildContext primaryContext,
@@ -51,7 +52,7 @@ class GenerateCodesButton {
 
     final title = Text("¿Cual es el boton que agregaras? $message");
 
-    await CreateDialog(primaryContext).openSimple(title, listViewItems);
+    await CreateModal(primaryContext).bottomSheet(title, listViewItems);
 
     if (controller.text == "") {
       throw "button is not valid";

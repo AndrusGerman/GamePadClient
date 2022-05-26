@@ -5,6 +5,7 @@ import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_button_code.d
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_size.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_type.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
+import 'package:game_pad_client/ui/widgets/modal.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class InputBoxCreator {
@@ -30,8 +31,8 @@ class InputBoxCreator {
       controllerSizeSetValue: controllerSizeSetValue,
     );
 
-    await CreateDialog(primaryContext)
-        .openSimple(const Text("Tamaño del elemento"), wid);
+    await CreateModal(primaryContext)
+        .bottomSheet(const Text("Tamaño del elemento"), wid);
 
     final value = controllerSize.text;
     if (value == "" || value == "0") {
@@ -46,10 +47,10 @@ class InputBoxCreator {
   }
 
   getType() {
-    final dCtr = CreateDialog(primaryContext);
+    final dCtr = CreateModal(primaryContext);
     final dialog = BoxCreatorGetType(
         controllerSizeSetValue: controllerSizeSetValue, goToSize: goToGetSize);
-    dCtr.openSimple(const Text("¿Que tipo de boton agregaras?"), dialog);
+    dCtr.bottomSheet(const Text("¿Que tipo de boton agregaras?"), dialog);
   }
 
   generateButtonType(ButtonViewScreenType type) async {

@@ -7,6 +7,7 @@ import 'package:game_pad_client/gamepad/ui/widgets/floating_buttons.dart/connect
 import 'package:game_pad_client/gamepad/ui/widgets/floating_buttons.dart/floating_screen_button.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/settings/view_list_simple_settings.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
+import 'package:game_pad_client/ui/widgets/modal.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class FloatingScreensContainer extends StatelessWidget {
@@ -52,7 +53,7 @@ class FloatingScreensContainer extends StatelessWidget {
               final storageBloc =
                   provider.BlocProvider.of<StorageBloc>(context);
 
-              CreateDialog(context).openSimple(const Text("Settings"),
+              CreateModal(context).bottomSheet(const Text("Settings"),
                   ViewListSimpleSettings(gpab: gpap, storageBloc: storageBloc));
             },
             icon: Icons.settings),
