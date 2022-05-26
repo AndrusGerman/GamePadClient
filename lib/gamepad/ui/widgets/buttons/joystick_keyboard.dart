@@ -1,6 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_joystick/flutter_joystick.dart';
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
+import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
 import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
 import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_base.dart';
@@ -49,12 +51,12 @@ class JoystickKeyboardGamePad extends StatelessWidget {
     return "${keys.join(',')}|${keysRemove.join(',')}";
   }
 
-  listenerPosition(StickDragDetails details) {
+  _listenerPosition(StickDragDetails details) {
     final value = covertInKeyboard(details.x, details.y);
     bloc.sendSignal(EventWSCreator(6, 1, Value: value));
   }
 
-  onStickDragEnd() {
+  _onStickDragEnd() {
     bloc.sendSignal(EventWSCreator(6, 3, Value: allKeysJoin));
   }
 
@@ -64,6 +66,24 @@ class JoystickKeyboardGamePad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final st = BlocProvider.of<GamePadModeCubit>(context);
+    final gpab = gbloc.BlocProvider.of<GamePadAddButtonPositionBloc>(context);
+
+    return StreamBuilder(
+        builder: (context, AsyncSnapshot<GamePadModeIndex?> value) {
+          if (GamePadModeIndex.values[value.data!.index] ==
+              GamePadModeIndex.removeButtonsMode) {
+            return createJoystick(context, (eve) {
+              gpab.removeBtn(buttonData.id);
+            }, (eve) {});
+          }
+          return createJoystick(context, _listenerPosition, _onStickDragEnd);
+        },
+        initialData: GamePadModeIndex.playMode,
+        stream: st.stream);
+  }
+
+  createJoystick(BuildContext context, listenerPosition, onStickDragEnd) {
     bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
     final double sizeBox = buttonData.size;
     this.allKeysJoin = buttonData.codes.join(',');
@@ -75,7 +95,7 @@ class JoystickKeyboardGamePad extends StatelessWidget {
 
     final jos = JoystickArea(
       mode: JoystickMode.all,
-      period: Duration(milliseconds: 12),
+      period: const Duration(milliseconds: 12),
       listener: listenerPosition,
       onStickDragEnd: onStickDragEnd,
       base: JoystickBaseGamePad(size: sizeBox),
@@ -91,7 +111,6 @@ class JoystickKeyboardGamePad extends StatelessWidget {
         child: jos,
       )),
     );
-
     return position;
   }
 }
