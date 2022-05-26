@@ -78,29 +78,32 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
   connectWS(BuildContext context) async {
     final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
 
-    final controller = TextEditingController(text: bloc.defaultIP);
+    final defaultIP = await bloc.getIPDefault();
+    final controller = TextEditingController(text: defaultIP);
 
     await showDialog(
         builder: (context) {
           final alerDial = AlertDialog(
-              title: Text("IP"),
+              title: const Text("IP: //"),
               content: ListView(
                 children: [
                   TextField(
                     controller: controller,
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        if (controller.text == "") {
-                          return;
-                        }
-                        Navigator.pop(context);
-                        // Intenta Conectar,
-                        bloc.connect(controller.text);
-                      },
-                      child: Container(
-                        child: Text("Conectar"),
-                      ))
+                    onPressed: () {
+                      final ip = controller.text;
+                      if (ip == "") {
+                        return;
+                      }
+                      Navigator.pop(context);
+                      bloc.setIPDefault(ip);
+
+                      // Intenta Conectar,
+                      bloc.connect(ip);
+                    },
+                    child: const Text("Conectar"),
+                  )
                 ],
               ));
 
