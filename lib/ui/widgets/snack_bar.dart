@@ -35,4 +35,20 @@ class SnackBarGamePad {
       // ),
     ));
   }
+
+  danger(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(color: Color.fromARGB(255, 48, 48, 48)),
+      ),
+      duration: const Duration(seconds: 1, milliseconds: 500),
+
+      backgroundColor: Colors.red,
+      // action: SnackBarAction(
+      //   label: 'ACTION',
+      //   onPressed: () {},
+      // ),
+    ));
+  }
 }
