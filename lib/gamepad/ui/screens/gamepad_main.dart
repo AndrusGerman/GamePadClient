@@ -22,7 +22,7 @@ class GamePadUiMainScreen extends StatelessWidget {
       floatingActionButton: const FloatingScreensContainer(),
     );
 
-    final connectWSBloc = FutureBuilder(
+    final providerBloc = FutureBuilder(
       builder: ((context, AsyncSnapshot<SharedPreferences?> snapshot) {
         if (snapshot.data == null) {
           return const Center(
@@ -50,6 +50,6 @@ class GamePadUiMainScreen extends StatelessWidget {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (_) => GamePadModeCubit()),
       BlocProvider(create: (_) => GamePadAddButtonPositionCubit()),
-    ], child: connectWSBloc);
+    ], child: providerBloc);
   }
 }
