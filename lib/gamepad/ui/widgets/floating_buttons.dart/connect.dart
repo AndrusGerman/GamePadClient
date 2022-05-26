@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/floating_buttons.dart/floating_screen_button.dart';
+import 'package:game_pad_client/ui/widgets/dialog.dart';
 import 'package:game_pad_client/ui/widgets/snack_bar.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
@@ -91,43 +92,36 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
       },
     );
 
-    await showDialog(
-        builder: (context) {
-          final alerDial = AlertDialog(
-              title: const Text("IP: //"),
-              content: ListView(
-                children: [
-                  TextField(
-                    controller: controller,
-                    onChanged: (valuestr) {
-                      isEnableIP(valuestr)
-                          .then((value) => stremEnableIP.add(value));
-                    },
-                  ),
-                  streamCustomIP,
-                  ElevatedButton(
-                    onPressed: () {
-                      isEnableIP("localhost").then((resp) {
-                        if (resp != 200) {
-                          SnackBarGamePad(context)
-                              .danger("No es posible conectarse (local)");
-                          return;
-                        }
-                        SnackBarGamePad(context).success("Ping correcto");
-                        wsbloc.connect("localhost");
-                        Navigator.pop(context);
-                      });
-                    },
-                    style:
-                        ElevatedButton.styleFrom(primary: Colors.greenAccent),
-                    child: const Text("Local (USB)"),
-                  )
-                ],
-              ));
+    final listView = ListView(
+      children: [
+        TextField(
+          controller: controller,
+          onChanged: (valuestr) {
+            isEnableIP(valuestr).then((value) => stremEnableIP.add(value));
+          },
+        ),
+        streamCustomIP,
+        ElevatedButton(
+          onPressed: () {
+            isEnableIP("localhost").then((resp) {
+              if (resp != 200) {
+                SnackBarGamePad(context)
+                    .danger("No es posible conectarse (local)");
+                return;
+              }
+              SnackBarGamePad(context).success("Ping correcto");
+              wsbloc.connect("localhost");
+              Navigator.pop(context);
+            });
+          },
+          style: ElevatedButton.styleFrom(primary: Colors.greenAccent),
+          child: const Text("Local (USB)"),
+        )
+      ],
+    );
 
-          return alerDial;
-        },
-        context: context);
+    // ignore: use_build_context_synchronously
+    await CreateDialog(context).openSimple(const Text("IP: //"), listView);
 
     stremEnableIP.close();
   }

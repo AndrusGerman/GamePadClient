@@ -5,7 +5,7 @@ class CreateDialog {
   CreateDialog(this.context);
 
   openSimple(Widget title, Widget content) async {
-    showDialog(
+    await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
