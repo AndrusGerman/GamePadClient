@@ -9,5 +9,17 @@ class ProfilesBloc extends Bloc {
     profiles.close();
   }
 
+  List<ProfileModel> listProfiles = [];
+
   final profiles = StreamController<List<ProfileModel>>();
+
+  addProfile(ProfileModel profile) {
+    listProfiles.add(profile);
+    profiles.add(listProfiles);
+  }
+
+  setProfiles(List<ProfileModel> setProfile) {
+    listProfiles = setProfile;
+    profiles.add(listProfiles);
+  }
 }

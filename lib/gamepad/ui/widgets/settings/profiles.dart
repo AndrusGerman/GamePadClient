@@ -24,12 +24,21 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
   Widget build(BuildContext context) {
     final repo = ProfileRepository(widget.storageBloc.storage!);
     final blocProfiles = BlocProvider.of<ProfilesBloc>(context);
+    blocProfiles.setProfiles(repo.getProfiles());
     return ListView(
       children: [
         TextField(
           controller: profileName,
         ),
-        ElevatedButton(onPressed: () {}, child: const Text("Guardar Perfil")),
+        ElevatedButton(
+            onPressed: () {
+              final newProfile =
+                  repo.generateProfile(profileName.text, widget.gpab.listaData);
+              blocProfiles.addProfile(newProfile);
+
+              repo.saveProfiles(blocProfiles.listProfiles);
+            },
+            child: const Text("Guardar Perfil")),
         StreamBuilder(
           builder: ((context, AsyncSnapshot<List?> snapshot) {
             if (snapshot.data!.isEmpty) {

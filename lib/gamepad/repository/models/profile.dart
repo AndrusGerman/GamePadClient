@@ -20,10 +20,13 @@ class ProfileModel {
     final Map<String, dynamic> x = jsonDecode(text);
 
     name = x['name'] as String;
-    final List<String> listStr = x['buttons'] as List<String>;
+
+    final List<String> listStr =
+        List<String>.from(x['buttons'] as List<dynamic>);
 
     buttons = listStr.map((e) {
       final bvsm = ButtonViewScreenModel();
+
       bvsm.setJson(e);
       return bvsm;
     }).toList();
