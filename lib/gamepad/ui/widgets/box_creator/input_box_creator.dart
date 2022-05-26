@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/box_creator/box_creator_input.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_button_code.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_type.dart';
+import 'package:game_pad_client/ui/widgets/dialog.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class InputBoxCreator {
@@ -77,62 +80,17 @@ class InputBoxCreator {
     }
   }
 
+  goToGetSize(ButtonViewScreenType type) {
+    getSize(primaryContext).then((value) {
+      generateButtonType(type);
+    });
+  }
+
   getType() {
-    showDialog(
-        context: primaryContext,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("¿Que tipo de boton agregaras?"),
-            content: ListView(
-              children: [
-                InputListTipeButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                    getSize(primaryContext).then((value) {
-                      generateButtonType(ButtonViewScreenType.buttonSimple);
-                    });
-                  },
-                  text: "Simple (Button)",
-                ),
-                InputListTipeButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                    getSize(primaryContext).then((value) {
-                      generateButtonType(ButtonViewScreenType.buttonMouse);
-                    });
-                  },
-                  text: "Simple (Button Mouse)",
-                ),
-                InputListTipeButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                    controllerSizeSetValue("120");
-                    getSize(primaryContext).then((value) {
-                      generateButtonType(ButtonViewScreenType.joystickMouse);
-                    });
-                  },
-                  text: "Mouse (joystick)",
-                ),
-                InputListTipeButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                    controllerSizeSetValue("120");
-                    getSize(primaryContext).then((value) {
-                      generateButtonType(ButtonViewScreenType.joystickKeyboard);
-                    });
-                  },
-                  text: "Keyboard (joystick)",
-                ),
-                InputListTipeButton(
-                  text: "**Cerrar**",
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+    final dCtr = CreateDialog(primaryContext);
+    final dialog = BoxCreatorGetType(
+        controllerSizeSetValue: controllerSizeSetValue, goToSize: goToGetSize);
+    dCtr.openSimple(const Text("¿Que tipo de boton agregaras?"), dialog);
   }
 
   generateButtonType(ButtonViewScreenType type) async {
@@ -211,20 +169,5 @@ class InputBoxCreator {
       provider.BlocProvider.of<GamePadAddButtonPositionBloc>(primaryContext)
           .sendButton(button);
     }
-  }
-}
-
-class InputListTipeButton extends StatelessWidget {
-  final void Function() onTap;
-  final String text;
-  const InputListTipeButton({Key? key, required this.onTap, required this.text})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(text),
-      onTap: onTap,
-    );
   }
 }
