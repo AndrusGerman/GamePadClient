@@ -74,7 +74,7 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
             isEnableIP(ip).then((resp) {
               if (resp != 200) {
                 SnackBarGamePad(context)
-                    .warning("No es posible conectarse (ip)");
+                    .danger("No es posible conectarse (ip)");
                 return;
               }
               SnackBarGamePad(context).success("Ping correcto");
