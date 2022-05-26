@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
+import 'package:game_pad_client/gamepad/repository/buttonViewScreen.dart';
 
 class CircleButtonRaw extends StatelessWidget {
   final ButtonViewScreen buttonData;
