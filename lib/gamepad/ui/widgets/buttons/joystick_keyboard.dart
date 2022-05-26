@@ -71,12 +71,13 @@ class JoystickKeyboardGamePad extends StatelessWidget {
 
     return StreamBuilder(
         builder: (context, AsyncSnapshot<GamePadModeIndex?> value) {
-          if (GamePadModeIndex.values[value.data!.index] ==
-              GamePadModeIndex.removeButtonsMode) {
+          final gamePadMode = GamePadModeIndex.values[value.data!.index];
+          if (gamePadMode == GamePadModeIndex.removeButtonsMode) {
             return createJoystick(context, (eve) {
               gpab.removeBtn(buttonData.id);
             }, (eve) {});
           }
+          // Is Normal
           return createJoystick(context, _listenerPosition, _onStickDragEnd);
         },
         initialData: GamePadModeIndex.playMode,
