@@ -11,6 +11,11 @@ class GamePadAddButtonPositionBloc extends Bloc {
     listDataController.add(listaData);
   }
 
+  setAll(List<ButtonViewScreen> list) {
+    listaData = list;
+    listDataController.add(listaData);
+  }
+
   final listDataController = StreamController<List<ButtonViewScreen>>();
 
   @override

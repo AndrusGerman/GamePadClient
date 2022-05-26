@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/floating_buttons.dart/connect.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/floating_buttons.dart/floating_screen_button.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/settings/view_list_simple_settings.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
 
 class FloatingScreensContainer extends StatelessWidget {
   const FloatingScreensContainer({Key? key}) : super(key: key);
@@ -44,8 +46,12 @@ class FloatingScreensContainer extends StatelessWidget {
 
         FloatingScreenButtonButton(
             onPressed: () {
-              CreateDialog(context)
-                  .openSimple(const Text("Settings"), ViewListSimpleSettings());
+              final gpap =
+                  provider.BlocProvider.of<GamePadAddButtonPositionBloc>(
+                      context);
+
+              CreateDialog(context).openSimple(
+                  const Text("Settings"), ViewListSimpleSettings(gpab: gpap));
             },
             icon: Icons.settings),
       ],

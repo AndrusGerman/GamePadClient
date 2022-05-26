@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 
 class ViewListSimpleSettings extends StatelessWidget {
+  final GamePadAddButtonPositionBloc gpab;
+  const ViewListSimpleSettings({Key? key, required this.gpab})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -9,6 +14,21 @@ class ViewListSimpleSettings extends StatelessWidget {
           icon: Icons.person,
           title: "Perfiles",
           onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        _ViewListSimpleItem(
+          icon: Icons.wifi,
+          title: "Latencia",
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        _ViewListSimpleItem(
+          icon: Icons.clear,
+          title: "Reset",
+          onPressed: () {
+            gpab.setAll([]);
             Navigator.pop(context);
           },
         ),
