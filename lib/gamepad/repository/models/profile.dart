@@ -27,7 +27,7 @@ class ProfileModel {
     } catch (err) {}
 
     final List<String> listStr =
-        List<String>.from(x['buttons'] as List<dynamic>);
+        List<String>.from((x['buttons'] as List<dynamic>));
 
     buttons = listStr.map((e) {
       final bvsm = ButtonViewScreenModel();

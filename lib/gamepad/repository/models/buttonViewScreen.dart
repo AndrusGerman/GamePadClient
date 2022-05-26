@@ -31,15 +31,18 @@ class ButtonViewScreenModel {
   }
 
   setJson(String data) {
+    print("break 1");
     final Map<String, dynamic> mapa = jsonDecode(data);
+    print("break 2");
     final Map<String, dynamic> positionRaw = mapa['position'];
+    print("break 3");
 
     position = Offset(positionRaw['x'] as double, positionRaw['y'] as double);
     size = mapa['size'] as double;
     final rawType = mapa['type'] as int;
     type = ButtonViewScreenType.values[rawType];
     id = mapa['id'] as int;
-    codes = mapa['codes'] as List<String>;
+    codes = List<String>.from((mapa['codes'] as List<dynamic>));
   }
 }
 
