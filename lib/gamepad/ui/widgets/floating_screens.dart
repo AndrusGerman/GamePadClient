@@ -110,8 +110,6 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
           return alerDial;
         },
         context: context);
-
-    controller.dispose();
   }
 }
 

@@ -7,6 +7,11 @@ import 'package:web_socket_channel/io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionWS extends gbloc.Bloc {
+  late SharedPreferences? prefs;
+  ConnectionWS() {
+    SharedPreferences.getInstance().then((value) => prefs = value);
+  }
+
   @override
   void dispose() {
     isConnect.close();
@@ -15,11 +20,9 @@ class ConnectionWS extends gbloc.Bloc {
   }
 
   Future<String> getIPDefault() async {
-    print("getIPDefault: 1");
-    final prefs = await SharedPreferences.getInstance();
     print("getIPDefault: 2");
 
-    var dataIP = prefs.getString("ip") ?? "192.168.101.16";
+    var dataIP = prefs?.getString("ip") ?? "192.168.101.16";
 
     print("getIPDefault: 3");
 
@@ -27,8 +30,7 @@ class ConnectionWS extends gbloc.Bloc {
   }
 
   Future<void> setIPDefault(String ip) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString("ip", ip);
+    prefs?.setString("ip", ip);
   }
 
   autoConnect() async {
@@ -58,18 +60,17 @@ class ConnectionWS extends gbloc.Bloc {
   WebSocket? ws = null;
 
   void connect(String ip) async {
+    print("desconectar last $ip");
     await closeLastConnection();
+    print("Intenta conectar a $ip");
     ws = await WebSocket.connect('ws://$ip:1323/ws')
         .timeout(const Duration(seconds: 5));
     isConnect.add(true);
     _isConnectBl = true;
 
-    // save last IP
-    final prefs = await SharedPreferences.getInstance();
-
     // Set config
     ws!.listen((event) {
-      print("Inicia todo");
+      print("In_isConnectBlicia todo");
     }, onError: (event) {
       print("No se pudo conectar");
     }, onDone: () {
@@ -77,6 +78,7 @@ class ConnectionWS extends gbloc.Bloc {
       isConnect.add(false);
       _isConnectBl = false;
     }, cancelOnError: true);
+    // save last IP
 
     // Create channel
     channel = IOWebSocketChannel(ws!);
