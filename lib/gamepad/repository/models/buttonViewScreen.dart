@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-class ButtonViewScreen {
+class ButtonViewScreenModel {
   late Offset position = Offset.zero;
   late double size = 0;
   late ButtonViewScreenType type;
   late int id = 0;
   late List<String> codes = [];
 
-  ButtonViewScreen setData(Offset position, double size,
+  ButtonViewScreenModel setData(Offset position, double size,
       ButtonViewScreenType type, List<dynamic> codes) {
     this.position = position;
     this.size = size;

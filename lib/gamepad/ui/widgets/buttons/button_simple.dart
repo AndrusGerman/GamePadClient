@@ -6,7 +6,7 @@ import 'package:game_pad_client/gamepad/ui/widgets/buttons/circle_button_raw.dar
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class ButtonSimpleGamePad extends StatelessWidget {
-  final ButtonViewScreen buttonData;
+  final ButtonViewScreenModel buttonData;
   const ButtonSimpleGamePad({Key? key, required this.buttonData})
       : super(key: key);
 

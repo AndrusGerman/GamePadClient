@@ -6,7 +6,7 @@ import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_base.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
 class JoystickMouseGamePad extends StatelessWidget {
-  final ButtonViewScreen buttonData;
+  final ButtonViewScreenModel buttonData;
   JoystickMouseGamePad({
     Key? key,
     required this.buttonData,

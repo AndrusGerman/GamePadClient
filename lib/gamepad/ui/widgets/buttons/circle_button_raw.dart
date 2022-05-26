@@ -3,7 +3,7 @@ import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
 
 class CircleButtonRaw extends StatelessWidget {
-  final ButtonViewScreen buttonData;
+  final ButtonViewScreenModel buttonData;
   late void Function()? onTap;
   late void Function(TapUpDetails)? onTapUp;
   late void Function(TapDownDetails)? onTapDown;

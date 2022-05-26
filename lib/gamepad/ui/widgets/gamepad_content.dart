@@ -76,7 +76,7 @@ class _ContentGamePadButtonsContainerState
     );
   }
 
-  Widget newButton(ButtonViewScreen buttonData) {
+  Widget newButton(ButtonViewScreenModel buttonData) {
     if (buttonData.type == ButtonViewScreenType.buttonSimple) {
       return (ButtonSimpleGamePad(buttonData: buttonData));
     }

@@ -62,7 +62,7 @@ class InputBoxCreator {
           (await GenerateCodesButton().generate(["principal"], primaryContext));
 
       // Generate button
-      final button = ButtonViewScreen().setData(
+      final button = ButtonViewScreenModel().setData(
         position,
         sizeButton,
         type,
@@ -81,7 +81,7 @@ class InputBoxCreator {
           .generate(["principal"], primaryContext, isMouse: true));
 
       // Generate button
-      final button = ButtonViewScreen().setData(
+      final button = ButtonViewScreenModel().setData(
         position,
         sizeButton,
         type,
@@ -96,7 +96,7 @@ class InputBoxCreator {
     // Simple Joystick Mouse
     if (type == ButtonViewScreenType.joystickMouse) {
       // Generate button
-      final button = ButtonViewScreen().setData(
+      final button = ButtonViewScreenModel().setData(
         position,
         sizeButton,
         type,
@@ -118,7 +118,7 @@ class InputBoxCreator {
       ], primaryContext));
 
       // Generate button
-      final button = ButtonViewScreen().setData(
+      final button = ButtonViewScreenModel().setData(
         position,
         sizeButton,
         type,
