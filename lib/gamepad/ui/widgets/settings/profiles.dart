@@ -42,7 +42,7 @@ class _ProfileSettingsGamePadState extends State<ProfileSettingsGamePad> {
         StreamBuilder(
           builder: ((context, AsyncSnapshot<List?> snapshot) {
             if (snapshot.data!.isEmpty) {
-              return Text("Sin perfiles disponibles...");
+              return const Text("Sin perfiles disponibles...");
             }
             // List Profiles
             final profiles =
@@ -75,6 +75,14 @@ class _ProfilesTiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(profile.name),
+      leading: const Icon(Icons.person),
+      onTap: () {},
+      trailing: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.remove_circle,
+            color: Colors.red,
+          )),
     );
   }
 }
