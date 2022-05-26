@@ -60,11 +60,12 @@ class ConnectionWS extends gbloc.Bloc {
   WebSocket? ws = null;
 
   void connect(String ip) async {
-    print("desconectar last $ip");
     await closeLastConnection();
-    print("Intenta conectar a $ip");
-    ws = await WebSocket.connect('ws://$ip:1323/ws')
-        .timeout(const Duration(seconds: 5));
+    print("Intenta conectar a $ip | 'ws://$ip:8992/ws'");
+    ws = await WebSocket.connect('ws://$ip:8992/ws')
+        .timeout(const Duration(seconds: 7));
+
+    print("Intenta conectar paso 2");
     isConnect.add(true);
     _isConnectBl = true;
 
@@ -78,7 +79,6 @@ class ConnectionWS extends gbloc.Bloc {
       isConnect.add(false);
       _isConnectBl = false;
     }, cancelOnError: true);
-    // save last IP
 
     // Create channel
     channel = IOWebSocketChannel(ws!);
