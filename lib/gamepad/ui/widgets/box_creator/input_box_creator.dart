@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
-import 'package:game_pad_client/gamepad/ui/widgets/box_creator/box_creator_input.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_button_code.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_size.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/box_creator/get_type.dart';
 import 'package:game_pad_client/ui/widgets/dialog.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as provider;
@@ -26,53 +25,13 @@ class InputBoxCreator {
   }
 
   Future getSize(BuildContext context) async {
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Tamaño del elemento"),
-            content: Container(
-              // height: 0,
-              // width: double.infinity,
-              child: Column(
-                children: [
-                  TextField(
-                    onChanged: (value) {
-                      // Ignore change
-                      if (value == "") {
-                        return;
-                      }
-                      // Set Max and min value
-                      final valueInt = int.parse(value).toInt();
-                      if (valueInt < 0 || valueInt > 390) {
-                        controllerSizeSetValue("390");
-                      }
-                    },
-                    keyboardType: TextInputType.number,
-                    controller: controllerSize,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (controllerSize.text != "") {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Container(
-                        child: Text("Guardar"),
-                      )),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        controllerSize.clear();
-                      },
-                      child: Container(
-                        child: Text("Cancelar"),
-                      ))
-                ],
-              ),
-            ),
-          );
-        });
+    final wid = BoxCreatorGetSize(
+      controllerSize: controllerSize,
+      controllerSizeSetValue: controllerSizeSetValue,
+    );
+
+    await CreateDialog(primaryContext)
+        .openSimple(const Text("Tamaño del elemento"), wid);
 
     final value = controllerSize.text;
     if (value == "" || value == "0") {
