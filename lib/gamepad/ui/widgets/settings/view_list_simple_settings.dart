@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:game_pad_client/bloc/storage_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
+import 'package:game_pad_client/gamepad/ui/widgets/settings/profiles.dart';
+import 'package:game_pad_client/ui/widgets/dialog.dart';
 
 class ViewListSimpleSettings extends StatelessWidget {
   final GamePadAddButtonPositionBloc gpab;
-  const ViewListSimpleSettings({Key? key, required this.gpab})
+  final StorageBloc storageBloc;
+  const ViewListSimpleSettings(
+      {Key? key, required this.gpab, required this.storageBloc})
       : super(key: key);
 
   @override
@@ -15,6 +20,8 @@ class ViewListSimpleSettings extends StatelessWidget {
           title: "Perfiles",
           onPressed: () {
             Navigator.pop(context);
+            CreateDialog(context).openSimple(const Text("Perfiles"),
+                ProfileSettingsGamePad(gpab: gpab, storageBloc: storageBloc));
           },
         ),
         _ViewListSimpleItem(
