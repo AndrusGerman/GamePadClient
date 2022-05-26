@@ -56,24 +56,47 @@ class _ContentGamePadButtonsContainerState
 
     return StreamBuilder(
       builder: (context, AsyncSnapshot<List<dynamic>> value) {
-        const nada = Center(
-          child: Text("nada",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-        );
-
-        if (value.data == null) {
-          return nada;
-        }
-        if (value.data!.isEmpty) {
-          return nada;
+        final data = value.data ?? [];
+        if (data.isEmpty) {
+          return createNone(context);
         }
 
         // Lista de botones
-        final wid = value.data!.map((e) => newButton(e)).toList();
+        final wid = data.map((e) => newButton(e)).toList();
         return Stack(children: wid);
       },
       stream: gpap.listDataController.stream,
     );
+  }
+
+  Widget createNone(BuildContext context) {
+    final gpm = BlocProvider.of<GamePadModeCubit>(context);
+    return StreamBuilder(
+      builder: (context, snapshot) => _createNoneBase(context),
+      stream: gpm.stream,
+    );
+  }
+
+  Widget _createNoneBase(BuildContext context) {
+    // ignore: prefer_function_declarations_over_variables
+    final generateTitle = (String text) {
+      return Text(text,
+          style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold));
+    };
+
+    var message = generateTitle("Nada");
+
+    final gpm = BlocProvider.of<GamePadModeCubit>(context);
+    if (gpm.state == GamePadModeIndex.playMode) {
+      message = generateTitle("Play Mode");
+    }
+    if (gpm.state == GamePadModeIndex.removeButtonsMode) {
+      message = generateTitle("Remove Mode");
+    }
+    if (gpm.state == GamePadModeIndex.addButtonsMode) {
+      message = generateTitle("Add Mode");
+    }
+    return Center(child: message);
   }
 
   Widget newButton(ButtonViewScreenModel buttonData) {
