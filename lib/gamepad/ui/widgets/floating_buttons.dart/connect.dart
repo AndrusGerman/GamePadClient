@@ -50,6 +50,21 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
     final controller = TextEditingController(text: defaultIP);
     final stremEnableIP = StreamController<int>();
 
+    // ignore: prefer_function_declarations_over_variables
+    final connectAndClose = (ip) {
+      // Connect and close
+      isEnableIP(ip).then((resp) {
+        if (resp != 200) {
+          SnackBarGamePad(context).danger("No es posible conectarse");
+          return;
+        }
+        SnackBarGamePad(context).success("Ping correcto");
+        wsbloc.connect(ip);
+        Navigator.pop(context);
+        wsbloc.setIPDefault(ip);
+      });
+    };
+
     final streamCustomIP = StreamBuilder(
       initialData: 1,
       stream: stremEnableIP.stream,
@@ -60,6 +75,7 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
           isEnableIP(controller.text).then((value) => stremEnableIP.add(value));
         }
 
+        // set color connect button
         Color colorButton = Colors.blue;
         if (statusCode == 1) {
           colorButton = Colors.redAccent;
@@ -68,27 +84,18 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
           colorButton = Colors.red;
         }
 
-        return ElevatedButton(
+        final buttonConnect = ElevatedButton(
           onPressed: () {
             final ip = controller.text;
-
-            isEnableIP(ip).then((resp) {
-              if (resp != 200) {
-                SnackBarGamePad(context)
-                    .danger("No es posible conectarse (ip)");
-                return;
-              }
-              SnackBarGamePad(context).success("Ping correcto");
-              wsbloc.connect(ip);
-              Navigator.pop(context);
-              wsbloc.setIPDefault(ip);
-            });
+            connectAndClose(ip);
           },
           style: ElevatedButton.styleFrom(
             primary: colorButton,
           ),
           child: const Text("Conectar"),
         );
+
+        return buttonConnect;
       },
     );
 
@@ -103,16 +110,7 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
         streamCustomIP,
         ElevatedButton(
           onPressed: () {
-            isEnableIP("localhost").then((resp) {
-              if (resp != 200) {
-                SnackBarGamePad(context)
-                    .danger("No es posible conectarse (local)");
-                return;
-              }
-              SnackBarGamePad(context).success("Ping correcto");
-              wsbloc.connect("localhost");
-              Navigator.pop(context);
-            });
+            connectAndClose("localhost");
           },
           style: ElevatedButton.styleFrom(primary: Colors.greenAccent),
           child: const Text("Local (USB)"),
@@ -128,7 +126,6 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
 
   Future<int> isEnableIP(String ip) async {
     final url = Uri.parse('http://$ip:8992/open');
-    print("La url: $url");
     try {
       final response = await http.get(url);
       return response.statusCode;
