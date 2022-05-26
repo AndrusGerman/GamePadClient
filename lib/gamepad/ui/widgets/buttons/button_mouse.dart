@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
 import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
 import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/circle_button_raw.dart';

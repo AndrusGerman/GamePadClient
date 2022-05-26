@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_pad_client/gamepad/bloc/GamePadAddButtonPosition.dart';
+import 'package:game_pad_client/gamepad/bloc/GamePadModeBloc.dart';
 import 'package:game_pad_client/gamepad/repository/models/buttonViewScreen.dart';
 import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/circle_button_raw.dart';
@@ -12,6 +14,21 @@ class ButtonSimpleGamePad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final st = BlocProvider.of<GamePadModeCubit>(context);
+
+    return StreamBuilder(
+        builder: (context, AsyncSnapshot<GamePadModeIndex?> value) {
+          if (GamePadModeIndex.values[value.data!.index] ==
+              GamePadModeIndex.removeButtonsMode) {
+            return createBtnRemove(context);
+          }
+          return createBtn(context);
+        },
+        initialData: GamePadModeIndex.playMode,
+        stream: st.stream);
+  }
+
+  createBtn(BuildContext context) {
     final bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
 
     return CircleButtonRaw(
@@ -26,6 +43,18 @@ class ButtonSimpleGamePad extends StatelessWidget {
       },
       onTapCancel: () {
         bloc.sendSignal(EventWSCreator(2, 3, Value: buttonData.codes[0]));
+      },
+    );
+  }
+
+  createBtnRemove(BuildContext context) {
+    final gpab = gbloc.BlocProvider.of<GamePadAddButtonPositionBloc>(context);
+
+    return CircleButtonRaw(
+      buttonData: buttonData,
+      // Iniciar
+      onTapUp: (details) {
+        gpab.removeBtn(buttonData.id);
       },
     );
   }
