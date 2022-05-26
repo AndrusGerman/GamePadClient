@@ -81,8 +81,6 @@ class _ConnectButtonBuilderState extends State<ConnectButtonBuilder> {
               Navigator.pop(context);
               bloc.setIPDefault(ip);
             });
-
-            Navigator.pop(context);
           },
           child: const Text("Conectar"),
           style: ElevatedButton.styleFrom(
