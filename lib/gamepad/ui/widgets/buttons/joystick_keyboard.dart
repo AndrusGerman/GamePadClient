@@ -22,30 +22,30 @@ class JoystickKeyboardGamePad extends StatelessWidget {
 
     // Down
     if (y >= 0.4) {
-      keys.add(position.down);
+      keys.add(_position.down);
     } else {
-      keysRemove.add(position.down);
+      keysRemove.add(_position.down);
     }
 
     // Up
     if (y <= -0.4) {
-      keys.add(position.up);
+      keys.add(_position.up);
     } else {
-      keysRemove.add(position.up);
+      keysRemove.add(_position.up);
     }
 
     // Left
     if (x >= 0.4) {
-      keys.add(position.left);
+      keys.add(_position.left);
     } else {
-      keysRemove.add(position.left);
+      keysRemove.add(_position.left);
     }
 
     // Right
     if (x <= -0.4) {
-      keys.add(position.right);
+      keys.add(_position.right);
     } else {
-      keysRemove.add(position.right);
+      keysRemove.add(_position.right);
     }
 
     return "${keys.join(',')}|${keysRemove.join(',')}";
@@ -61,7 +61,7 @@ class JoystickKeyboardGamePad extends StatelessWidget {
   }
 
   late ConnectionWS bloc;
-  late _position position;
+  late PositionType _position;
   late String allKeysJoin;
 
   @override
@@ -87,9 +87,9 @@ class JoystickKeyboardGamePad extends StatelessWidget {
   createJoystick(BuildContext context, listenerPosition, onStickDragEnd) {
     bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
     final double sizeBox = buttonData.size;
-    this.allKeysJoin = buttonData.codes.join(',');
+    allKeysJoin = buttonData.codes.join(',');
 
-    this.position = _position(buttonData.codes[0], buttonData.codes[1],
+    _position = PositionType(buttonData.codes[0], buttonData.codes[1],
         buttonData.codes[2], buttonData.codes[3]);
 
     final joyStickAreaSize = sizeBox * 1.3;
@@ -106,7 +106,7 @@ class JoystickKeyboardGamePad extends StatelessWidget {
       left: buttonData.position.dx - (joyStickAreaSize / 2),
       top: buttonData.position.dy - (joyStickAreaSize / 2),
       child: SafeArea(
-          child: Container(
+          child: SizedBox(
         width: joyStickAreaSize,
         height: joyStickAreaSize,
         child: jos,
@@ -116,11 +116,11 @@ class JoystickKeyboardGamePad extends StatelessWidget {
   }
 }
 
-class _position {
+class PositionType {
   final String up;
   final String left;
   final String right;
   final String down;
 
-  _position(this.up, this.left, this.right, this.down);
+  PositionType(this.up, this.right, this.left, this.down);
 }
