@@ -8,13 +8,18 @@ import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_base.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
-class JoystickMouseGamePad extends StatelessWidget {
+class JoystickMouseGamePad extends StatefulWidget {
   final ButtonViewScreenModel buttonData;
-  JoystickMouseGamePad({
+  const JoystickMouseGamePad({
     Key? key,
     required this.buttonData,
   }) : super(key: key);
 
+  @override
+  State<JoystickMouseGamePad> createState() => _JoystickMouseGamePadState();
+}
+
+class _JoystickMouseGamePadState extends State<JoystickMouseGamePad> {
   _listenerPosition(StickDragDetails details) {
     bloc.sendSignalMouse(
         EventWSCreator(1, 1, ValueX: details.x, ValueY: details.y));
@@ -36,7 +41,7 @@ class JoystickMouseGamePad extends StatelessWidget {
           final gamePadMode = GamePadModeIndex.values[value.data!.index];
           if (gamePadMode == GamePadModeIndex.removeButtonsMode) {
             return createJoystick(context, (eve) {
-              gpab.removeBtn(buttonData.id);
+              gpab.removeBtn(widget.buttonData.id);
             }, (eve) {});
           }
           // Is Normal
@@ -48,7 +53,7 @@ class JoystickMouseGamePad extends StatelessWidget {
 
   createJoystick(BuildContext context, listenerPosition, onStickDragEnd) {
     bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
-    final double sizeBox = buttonData.size;
+    final double sizeBox = widget.buttonData.size;
 
     final joyStickAreaSize = sizeBox * 1.3;
 
@@ -61,10 +66,10 @@ class JoystickMouseGamePad extends StatelessWidget {
     );
 
     final position = Positioned(
-      left: buttonData.position.dx - (joyStickAreaSize / 2),
-      top: buttonData.position.dy - (joyStickAreaSize / 2),
+      left: widget.buttonData.position.dx - (joyStickAreaSize / 2),
+      top: widget.buttonData.position.dy - (joyStickAreaSize / 2),
       child: SafeArea(
-          child: Container(
+          child: SizedBox(
         width: joyStickAreaSize,
         height: joyStickAreaSize,
         child: jos,

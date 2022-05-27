@@ -8,14 +8,20 @@ import 'package:game_pad_client/gamepad/repository/connect_ws.dart';
 import 'package:game_pad_client/gamepad/ui/widgets/buttons/joystick_base.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart' as gbloc;
 
-class JoystickKeyboardGamePad extends StatelessWidget {
+class JoystickKeyboardGamePad extends StatefulWidget {
   final ButtonViewScreenModel buttonData;
 
-  JoystickKeyboardGamePad({
+  const JoystickKeyboardGamePad({
     Key? key,
     required this.buttonData,
   }) : super(key: key);
 
+  @override
+  State<JoystickKeyboardGamePad> createState() =>
+      _JoystickKeyboardGamePadState();
+}
+
+class _JoystickKeyboardGamePadState extends State<JoystickKeyboardGamePad> {
   covertInKeyboard(double x, y) {
     var keys = [];
     var keysRemove = [];
@@ -61,7 +67,9 @@ class JoystickKeyboardGamePad extends StatelessWidget {
   }
 
   late ConnectionWS bloc;
+
   late PositionType _position;
+
   late String allKeysJoin;
 
   @override
@@ -74,7 +82,7 @@ class JoystickKeyboardGamePad extends StatelessWidget {
           final gamePadMode = GamePadModeIndex.values[value.data!.index];
           if (gamePadMode == GamePadModeIndex.removeButtonsMode) {
             return createJoystick(context, (eve) {
-              gpab.removeBtn(buttonData.id);
+              gpab.removeBtn(widget.buttonData.id);
             }, (eve) {});
           }
           // Is Normal
@@ -86,11 +94,14 @@ class JoystickKeyboardGamePad extends StatelessWidget {
 
   createJoystick(BuildContext context, listenerPosition, onStickDragEnd) {
     bloc = gbloc.BlocProvider.of<ConnectionWS>(context);
-    final double sizeBox = buttonData.size;
-    allKeysJoin = buttonData.codes.join(',');
+    final double sizeBox = widget.buttonData.size;
+    allKeysJoin = widget.buttonData.codes.join(',');
 
-    _position = PositionType(buttonData.codes[0], buttonData.codes[1],
-        buttonData.codes[2], buttonData.codes[3]);
+    _position = PositionType(
+        widget.buttonData.codes[0],
+        widget.buttonData.codes[1],
+        widget.buttonData.codes[2],
+        widget.buttonData.codes[3]);
 
     final joyStickAreaSize = sizeBox * 1.3;
 
@@ -103,8 +114,8 @@ class JoystickKeyboardGamePad extends StatelessWidget {
     );
 
     final position = Positioned(
-      left: buttonData.position.dx - (joyStickAreaSize / 2),
-      top: buttonData.position.dy - (joyStickAreaSize / 2),
+      left: widget.buttonData.position.dx - (joyStickAreaSize / 2),
+      top: widget.buttonData.position.dy - (joyStickAreaSize / 2),
       child: SafeArea(
           child: SizedBox(
         width: joyStickAreaSize,
