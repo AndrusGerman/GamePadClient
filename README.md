@@ -1,6 +1,10 @@
 # GamePadClient
 
-Simple UI, to control your computer from the phone. As if it were a video game controller, personalized
+Simple UI, to control your computer from the phone. As if it were a video game controller, personalized 
+
+*To connect you need a server installed on the client (computer)*  
+
+It is necessary to install [GamePadServer](https://github.com/AndrusGerman/GamePadLinuxServer) on your computer (Currently only compatible with linux)
 
 
 This project is under construction and may have some bugs.
